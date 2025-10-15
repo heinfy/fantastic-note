@@ -12,6 +12,7 @@ function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
+      <meta name="algolia-site-verification" content="BBE193622222A264" />
       <div className="container">
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
@@ -31,10 +32,12 @@ function HomepageHeader() {
 
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
+  console.log('siteConfig', siteConfig);
+
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title="首页"
+      description="TypeScript, JavaScript, VUE, React, python 等技术随笔">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

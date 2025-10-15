@@ -5,8 +5,8 @@ import { themes as prismThemes } from 'prism-react-renderer';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: "HouFei's Site",
-  tagline: 'My note is fantastic',
+  title: "HF's Site",
+  tagline: "HouFei's note is fantastic note",
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -15,7 +15,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://fantastic-note.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -32,8 +32,8 @@ const config: Config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en']
+    defaultLocale: 'zh-Hans',
+    locales: ['zh-Hans']
   },
 
   presets: [
@@ -44,7 +44,7 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/'
+          editUrl: 'https://github.com/heinfy/fantastic-note/tree/main'
         },
         blog: {
           showReadingTime: true,
@@ -54,7 +54,7 @@ const config: Config = {
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          editUrl: 'https://github.com/heinfy/fantastic-note/tree/main',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -71,9 +71,9 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'Fantastic',
       logo: {
-        alt: 'My Site Logo',
+        alt: "HouFei' Note",
         src: 'img/logo.svg'
       },
       items: [
@@ -81,11 +81,11 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial'
+          label: '教程'
         },
-        { to: '/blog', label: 'Blog', position: 'left' },
+        { to: '/blog', label: '博客', position: 'left' },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/heinfy/fantastic-note',
           label: 'GitHub',
           position: 'right'
         }
@@ -95,28 +95,28 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: '文档',
           items: [
             {
-              label: 'Tutorial',
+              label: '教程',
               to: '/docs/intro'
             }
           ]
         },
         {
-          title: 'Community',
+          title: '关于我',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus'
+              label: '我的主页',
+              href: 'https://heinfy.top'
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus'
+              label: 'react-admin-app',
+              href: 'https://github.com/heinfy/react-admin-app'
             },
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus'
+              label: 'console-view',
+              href: 'https://github.com/heinfy/console-view'
             }
           ]
         },
@@ -124,12 +124,12 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
+              label: '博客',
               to: '/blog'
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus'
+              href: 'https://github.com/heinfy'
             }
           ]
         }
@@ -139,6 +139,11 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula
+    },
+    algolia: {
+      appId: process.env.ALGOLIA_APP_ID,
+      apiKey: process.env.ALGOLIA_API_KEY,
+      indexName: process.env.ALGOLIA_INDEX_NAME
     }
   } satisfies Preset.ThemeConfig
 };
