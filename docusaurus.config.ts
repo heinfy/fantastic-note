@@ -5,8 +5,8 @@ import { themes as prismThemes } from 'prism-react-renderer';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: "HF's Site",
-  tagline: "HouFei's note is fantastic note",
+  title: '一直走的技术博客',
+  tagline: 'Include React, Vue.js, Typescript, Nodejs, Python, Docker ...',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -73,10 +73,16 @@ const config: Config = {
     navbar: {
       title: 'Fantastic',
       logo: {
-        alt: "HouFei' Note",
+        alt: 'Logo',
         src: 'img/logo.svg'
       },
       items: [
+        {
+          type: 'docSidebar',
+          sidebarId: 'dockerSidebar',
+          position: 'left',
+          label: 'Docker'
+        },
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
@@ -98,8 +104,8 @@ const config: Config = {
           title: '文档',
           items: [
             {
-              label: '教程',
-              to: '/docs/intro'
+              label: 'docusaurus 教程',
+              to: '/docs/Tutorial/intro'
             }
           ]
         },
@@ -141,9 +147,9 @@ const config: Config = {
       darkTheme: prismThemes.dracula
     },
     algolia: {
-      appId: process.env.ALGOLIA_APP_ID,
-      apiKey: process.env.ALGOLIA_API_KEY,
-      indexName: process.env.ALGOLIA_INDEX_NAME
+      appId: process.env.ALGOLIA_APP_ID || 'D6L79QDWQN',
+      apiKey: process.env.ALGOLIA_API_KEY || 'ae8d94a7792b678a590640f3479dff08',
+      indexName: process.env.ALGOLIA_INDEX_NAME || '爬虫一号'
     }
   } satisfies Preset.ThemeConfig
 };
