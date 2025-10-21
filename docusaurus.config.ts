@@ -79,9 +79,51 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'tsSidebar',
+          label: 'TypeScript'
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'reactSidebar',
+          label: 'React'
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'jsSidebar',
+          label: 'JavaScript'
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'vueSidebar',
+          label: 'Vue'
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'liunxSidebar',
+          label: 'Liunx'
+        },
+        {
+          type: 'docSidebar',
           sidebarId: 'dockerSidebar',
           position: 'left',
           label: 'Docker'
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'hcSidebar',
+          label: 'HTML和CSS'
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'otherSidebar',
+          label: '其他'
         },
         {
           type: 'docSidebar',
