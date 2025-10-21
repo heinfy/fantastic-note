@@ -172,8 +172,12 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: '博客',
+              label: '博客教程',
               to: '/blog'
+            },
+            {
+              label: '我的简历',
+              href: 'https://resume.heinfy.top/'
             },
             {
               label: 'GitHub',
