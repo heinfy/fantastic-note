@@ -1,13 +1,6 @@
 ---
-id: nodejs
 title: 安装 nodejs
-description: 安装 nodejs
-keywords: [Liunx]
-tags:
-  - Liunx
-hide_title: true
 sidebar_position: 1
-custom_edit_url: null
 ---
 
 ```bash

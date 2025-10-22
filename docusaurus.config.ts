@@ -115,6 +115,12 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
+          sidebarId: 'pySidebar',
+          position: 'left',
+          label: 'Pythoon'
+        },
+        {
+          type: 'docSidebar',
           position: 'left',
           sidebarId: 'hcSidebar',
           label: 'HTML和CSS'
@@ -125,13 +131,13 @@ const config: Config = {
           sidebarId: 'otherSidebar',
           label: '其他'
         },
-        {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: '教程'
-        },
-        { to: '/blog', label: '博客', position: 'left' },
+        // {
+        //   type: 'docSidebar',
+        //   sidebarId: 'tutorialSidebar',
+        //   position: 'left',
+        //   label: '教程'
+        // },
+        // { to: '/blog', label: '博客', position: 'left' },
         {
           href: 'https://github.com/heinfy/fantastic-note',
           label: 'GitHub',

@@ -1,13 +1,6 @@
 ---
-id: mysql
 title: 安装 mysql
-description: 安装 mysql
-keywords: [Liunx]
-tags:
-  - Liunx
-hide_title: true
 sidebar_position: 3
-custom_edit_url: null
 ---
 
 - [Liunx 安装 mysql](https://cloud.tencent.com/developer/article/2080568?from=15425&areaSource=102001.1&traceId=9NrLkc3acnRfqHcQEAcES)
