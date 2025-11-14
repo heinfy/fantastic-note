@@ -1,15 +1,3 @@
----
-id: mysql
-title: mysql 基础
-description: MySQL 基础
-keywords: [Liunx]
-tags:
-  - Liunx
-hide_title: true
-sidebar_position: 1
-custom_edit_url: null
----
-
 ## 启动和登录
 
 ```mysql

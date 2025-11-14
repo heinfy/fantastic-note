@@ -1,15 +1,3 @@
----
-id: MongooDB
-title: MongooDB
-description: MongooDB
-keywords: [Liunx]
-tags:
-  - Liunx
-hide_title: true
-sidebar_position: 2
-custom_edit_url: null
----
-
 参考资料：
 
 - [MONGODB 手册](https://docs.mongodb.com/manual/)

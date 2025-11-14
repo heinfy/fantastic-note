@@ -117,7 +117,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'pySidebar',
           position: 'left',
-          label: 'Pythoon'
+          label: 'Python'
         },
         {
           type: 'docSidebar',
