@@ -18,7 +18,56 @@ useEffect(() => {
   - 如果依赖数组为数组 `[c]`（c 不是 useState 返回值），那么组件状态改变是都会执行一次；
   - 如果省略第二个参数，则副作用函数会在每次组件重新渲染时都被执行。
 
-- useEffect 副作用函数返回一个清理函数，用于清理副作用。当组件卸载时，或者在下一次执行副作用函数之前执行清理操作。
+- useEffect 副作用函数返回一个清理函数，用于清理副作用。当**组件卸载时，或者在下一次执行副作用函数之前执行清理操作**。
+
+## 示例
+
+```jsx
+import { useEffect, useState } from "react";
+
+export default function App() {
+  const [name, setName] = useState("");
+  const [id, setId] = useState(1);
+
+  useEffect(() => {
+    console.log(1);
+    return () => {
+      console.log(2);
+    };
+  }, [name]);
+
+  useEffect(() => {
+    console.log(3);
+    return () => {
+      console.log(4);
+    };
+  }, [name, id]);
+
+  return (
+    <div>
+      <button onClick={(x) => setName("dfasdf")}>new name</button>
+    </div>
+  );
+}
+```
+
+```bash
+# 首次挂载
+# 两个 useEffect 都会在 mount 后执行
+# 因为依赖数组不是空的，但这是首次渲染，React 会执行所有 effect。
+1
+3
+
+# 点击按钮后，react 重新渲染组件
+# 清理上一次渲染中依赖发生变化的 effect 的 cleanup 函数
+2
+4
+# 执行新的 effect
+1
+3
+```
+
+---
 
 ```jsx
 const [count, setCount] = useState(1);
@@ -31,4 +80,24 @@ useEffect(() => {
   }, 1000);
   console.log('这是第' + count + '执行');
 }, [arr]);
+```
+
+---
+
+```jsx
+import { useState } from "react";
+
+export default function App() {
+  const [count, setCount] = useState(1);
+  return (
+    <div>
+      <button onClick={() => {
+        setCount(count + 1);  // (1)
+        setTimeout(() => { // (2) ← 注意：因为 函数闭包， 这里读的是“旧”的 count
+          setCount(count + 1); // (3) ← 这里用的也是“旧”的 count
+        }, 1000);
+      }}>{count}</button>
+    </div>
+  );
+}
 ```
