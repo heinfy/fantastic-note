@@ -1,5 +1,3 @@
-# React.useDeferredValue
-
 > lets you defer updating the less important parts of the screen.
 >
 > 允许用户推迟屏幕更新优先级不高部分。通俗来讲，如果说某些渲染比较消耗性能，比如存在实时计算和反馈，我们可以使用这个`Hook`降低其计算的优先级，使得避免整个应用变得卡顿。
