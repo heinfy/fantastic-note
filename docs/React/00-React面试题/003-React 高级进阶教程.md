@@ -1,24 +1,3 @@
-# React 问题
-
-## Q：JSX 的本质是什么，它和 JS 之间到底是什么关系？
-
-A：JSX 是 JavaScript 的一种语法扩展，它和模板语言很接近，但是它充分具备 JavaScript 的能力。
-
-## Q：为什么要用 JSX？不用会有什么后果？
-
-A：JSX 语法糖允许前端开发者使用我们最为熟悉的类 HTML 标签语法来创建虚拟 DOM，在降低学习成本的同时，也提升了研发效率与研发体验**。**
-
-## Q：JSX 背后的功能模块是什么，这个功能模块都做了哪些事情？
-
-A：JSX 实际上是在调用 `React.createElement`方法。`React.createElement`接受三个参数：`type、props、children`。主要完成了以下几个任务：
-
-1. 创建一个虚拟 DOM 元素，代表 UI 中的一个组件或元素。
-2. 将 JSX 中的属性转换为 props 对象。
-3. 处理嵌套的子元素，将它们转换为相应的虚拟 DOM 结构。
-4. 返回表示整个 JSX 结构的虚拟 DOM 元素。
-
-这些虚拟 DOM 元素最终会被 React 的调解器（`reconciler`）处理，用于更新实际的 DOM 并保持 UI 的同步。
-
 ## Q：为什么 React 16 要更改组件的生命周期？
 
 A：现象： Mounting 阶段：组件的初始化渲染（挂载）
@@ -124,14 +103,6 @@ class myEventEmitter {
 
 - 使用 Context API 维护全局状态
 - redux
-
-## Q：React Hook 设计动机与工作模式是什么？
-
-A：设计动机： React Hooks 是 React 16.8 引入的一项新特性。
-
-它的设计动机主要是为了解决在组件之间复用状态逻辑的问题，以及在函数式组件中引入更多的特性，如状态和副作用。
-
-React Hooks 的实现机制基于 Fiber 架构，通过 hooks 链表和闭包来追踪和保存组件的状态。这种机制允许函数组件拥有状态，副作用等特性，同时保持了 React 的性能和渲染的一致性。
 
 ## Q：react 的时间切片是如何理解？
 
