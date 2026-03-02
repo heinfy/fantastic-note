@@ -427,7 +427,7 @@ promise2
 module.export = MyPromise;
 ```
 
-## 实现 promise.all 方法
+### 实现 promise.all 方法
 
 > `const p = Promise.all([p1, p2, p3]);`
 >
@@ -438,34 +438,34 @@ module.export = MyPromise;
 > （2）只要 p1、p2、p3 之中有一个被 rejected，p 的状态就变成 rejected，此时第一个被 reject 的实例的返回值，会传递给 p 的回调函数。
 
 ```js
-function myPromiseAll(promises) {
-  return new Promise(function (resolve, reject) {
-    if (!Array.isArray(promises)) {
-      throw new Error('promises 必须为数组');
-    }
-    let result = [],
-      complatedCount = 0;
-    // 数组length为0，直接返回空对象
-    if (promises.length === 0) {
-      resolve(result);
-    }
-    function processPromise(index, value) {
-      result[index] = value;
-      complatedCount++;
-      // promises 所有方法都成功，返回结果数组
-      if (complatedCount === promises.length) {
-        resolve(result);
-      }
-    }
-    for (let i = 0; i < promises.length; i++) {
-      Promise.resolve(promises[i])
+function myPromiseAll(iterable) {
+  // 将 iterable 转换为数组（支持类数组、Set 等）
+  const promises = Array.from(iterable);
+  const results = new Array(promises.length);
+  let resolvedCount = 0;
+
+  // 如果是空数组，立即 resolve 空数组
+  if (promises.length === 0) {
+    return Promise.resolve([]);
+  }
+
+  return new Promise((resolve, reject) => {
+    promises.forEach((promise, index) => {
+      // 使用 Promise.resolve 包装，确保非 Promise 值也能处理
+      Promise.resolve(promise)
         .then(value => {
-          processPromise(i, value);
+          results[index] = value;
+          resolvedCount++;
+          // 当所有 Promise 都 resolved 后，resolve 整个结果
+          if (resolvedCount === promises.length) {
+            resolve(results);
+          }
         })
-        .catch(error => {
-          reject(error);
+        .catch(reason => {
+          // 一旦有一个 reject，立即 reject 整个 Promise
+          reject(reason);
         });
-    }
+    });
   });
 }
 
@@ -483,7 +483,7 @@ myPromiseAll([promise1, promise2, promise3])
   });
 ```
 
-## 实现 promise.allSettled 方法
+### 实现 promise.allSettled 方法
 
 ```js
 function allSettled(promises) {
