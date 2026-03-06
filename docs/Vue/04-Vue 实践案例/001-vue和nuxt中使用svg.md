@@ -1,15 +1,3 @@
----
-id: svg
-title: vue和nuxt中使用svg
-keywords: [Vue]
-tags:
-  - Vue
-hide_title: true
-sidebar_position: 1
-description: vue和nuxt中使用svg
-custom_edit_url: null
----
-
 ## vue 使用 svg 图标
 
 ### 安装依赖

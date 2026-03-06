@@ -1,15 +1,3 @@
----
-id: instance
-title: vue中渲染vue实例
-keywords: [Vue]
-tags:
-  - Vue
-hide_title: true
-sidebar_position: 3
-description: Vue 实例中渲染新 Vue 实例
-custom_edit_url: null
----
-
 ```html
 <!-- ParentComponent.vue -->
 <template>

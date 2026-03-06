@@ -1,15 +1,3 @@
----
-id: iframe
-title: vue 组件中 iframe 通信
-keywords: [Vue]
-tags:
-  - Vue
-hide_title: true
-sidebar_position: 2
-description: vue 组件中 iframe 通信
-custom_edit_url: null
----
-
 注意：**vue 和 iframe 不能跨域**
 
 ```html
