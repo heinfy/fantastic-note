@@ -1,15 +1,3 @@
----
-id: beforeRoute
-title: beforeRoute
-keywords: [Vue]
-tags:
-  - Vue
-hide_title: true
-sidebar_position: 1
-description: Vue 的 beforeRoute
-custom_edit_url: null
----
-
 组件内守卫：
 
 - `beforeRouteEnter(to, from, next) {}`
