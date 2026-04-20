@@ -1,15 +1,3 @@
----
-id: 001
-title: Liunx 基础
-description: Liunx 基础
-keywords: [Liunx]
-tags:
-  - Liunx
-hide_title: true
-sidebar_position: 1
-custom_edit_url: null
----
-
 ## 基本格式
 
 ```bash

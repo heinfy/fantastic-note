@@ -1,15 +1,3 @@
----
-id: 002
-title: Liunx 命令
-description: Liunx 命令大全
-keywords: [Liunx]
-tags:
-  - Liunx
-hide_title: true
-sidebar_position: 2
-custom_edit_url: null
----
-
 ## 系统信息
 
 ### 1. top

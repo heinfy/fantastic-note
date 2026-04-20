@@ -1,8 +1,3 @@
----
-title: 安装 nodejs
-sidebar_position: 1
----
-
 ```bash
 yum install -y wget # 下载wget
 

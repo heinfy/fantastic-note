@@ -115,12 +115,6 @@ const config: Config = {
         {
           type: 'docSidebar',
           position: 'left',
-          sidebarId: 'tsSidebar',
-          label: 'TypeScript',
-        },
-        {
-          type: 'docSidebar',
-          position: 'left',
           sidebarId: 'reactSidebar',
           label: 'React',
         },
@@ -133,6 +127,12 @@ const config: Config = {
         {
           type: 'docSidebar',
           position: 'left',
+          sidebarId: 'tsSidebar',
+          label: 'TypeScript',
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
           sidebarId: 'vueSidebar',
           label: 'Vue',
         },
@@ -141,12 +141,6 @@ const config: Config = {
           position: 'left',
           sidebarId: 'liunxSidebar',
           label: 'Liunx',
-        },
-        {
-          type: 'docSidebar',
-          sidebarId: 'dockerSidebar',
-          position: 'left',
-          label: 'Docker',
         },
         {
           type: 'docSidebar',

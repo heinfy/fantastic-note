@@ -9,7 +9,7 @@ title: Docker 的安装及卸载
 
 ---
 
-### ✅ 步骤 1：安装必要的依赖
+### 步骤 1：安装必要的依赖
 
 首先，确保系统已更新，并安装 `dnf` 操作所需的工具：
 
@@ -26,7 +26,7 @@ sudo dnf install -y dnf-plugins-core
 
 ---
 
-### ✅ 步骤 2：添加 Docker 官方 GPG 密钥和仓库
+### 步骤 2：添加 Docker 官方 GPG 密钥和仓库
 
 运行以下命令来添加 Docker 的官方仓库：
 
@@ -34,11 +34,11 @@ sudo dnf install -y dnf-plugins-core
 sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 ```
 
-> ✅ **注意**：虽然路径中是 `centos`，但它也适用于 Rocky Linux，因为 Rocky 是 RHEL 的下游重建版本，与 CentOS 兼容。
+> **注意**：虽然路径中是 `centos`，但它也适用于 Rocky Linux，因为 Rocky 是 RHEL 的下游重建版本，与 CentOS 兼容。
 
 ---
 
-### ✅ 步骤 3：（可选）启用 `stable` 仓库（默认已启用）
+### 步骤 3：（可选）启用 `stable` 仓库（默认已启用）
 
 Docker 仓库通常默认启用 `stable` 版本。你可以确认一下：
 
@@ -54,7 +54,7 @@ sudo dnf config-manager --set-enabled docker-ce-edge
 
 ---
 
-### ✅ 步骤 4：安装 Docker Engine
+### 步骤 4：安装 Docker Engine
 
 现在你可以从官方仓库安装 Docker：
 
@@ -70,7 +70,7 @@ sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 
 ---
 
-### ✅ 步骤 5：启动并启用 Docker 服务
+### 步骤 5：启动并启用 Docker 服务
 
 ```bash
 # 启动 Docker 服务
@@ -82,7 +82,7 @@ sudo systemctl enable docker
 
 ---
 
-### ✅ 步骤 6：验证安装
+### 步骤 6：验证安装
 
 ```bash
 sudo docker --version
@@ -93,7 +93,78 @@ sudo docker run hello-world
 
 ---
 
-### ✅ （可选）将当前用户加入 `docker` 组（避免每次使用 `sudo`）
+### 步骤 7：修改下载源地址
+
+### `docker-ce.repo` 采用`tsinghua`源
+
+```bash
+[docker-ce-stable]
+name=Docker CE Stable - $basearch
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/$releasever/$basearch/stable
+enabled=1
+gpgcheck=1
+gpgkey=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/gpg
+
+[docker-ce-stable-debuginfo]
+name=Docker CE Stable - Debuginfo $basearch
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/$releasever/debug-$basearch/stable
+enabled=0
+gpgcheck=1
+gpgkey=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/gpg
+
+[docker-ce-stable-source]
+name=Docker CE Stable - Sources
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/$releasever/source/stable
+enabled=0
+gpgcheck=1
+gpgkey=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/gpg
+
+[docker-ce-test]
+name=Docker CE Test - $basearch
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/$releasever/$basearch/test
+enabled=0
+gpgcheck=1
+gpgkey=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/gpg
+
+[docker-ce-test-debuginfo]
+name=Docker CE Test - Debuginfo $basearch
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/$releasever/debug-$basearch/test
+enabled=0
+gpgcheck=1
+gpgkey=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/gpg
+
+[docker-ce-test-source]
+name=Docker CE Test - Sources
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/$releasever/source/test
+enabled=0
+gpgcheck=1
+gpgkey=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/gpg
+
+[docker-ce-nightly]
+name=Docker CE Nightly - $basearch
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/$releasever/$basearch/nightly
+enabled=0
+gpgcheck=1
+gpgkey=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/gpg
+
+[docker-ce-nightly-debuginfo]
+name=Docker CE Nightly - Debuginfo $basearch
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/$releasever/debug-$basearch/nightly
+enabled=0
+gpgcheck=1
+gpgkey=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/gpg
+
+[docker-ce-nightly-source]
+name=Docker CE Nightly - Sources
+baseurl=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/$releasever/source/nightly
+enabled=0
+gpgcheck=1
+gpgkey=https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/centos/gpg
+```
+
+---
+
+### （可选）将当前用户加入 `docker` 组（避免每次使用 `sudo`）
 
 ```bash
 sudo usermod -aG docker $USER
@@ -111,7 +182,7 @@ sudo usermod -aG docker $USER
 
 ---
 
-### ✅ 一、检查当前 Docker 版本
+### 一、检查当前 Docker 版本
 
 ```bash
 docker --version
@@ -119,7 +190,7 @@ docker --version
 
 ---
 
-### ✅ 二、更新 Docker 的步骤
+### 二、更新 Docker 的步骤
 
 #### 1. **更新系统包列表**
 
@@ -155,7 +226,7 @@ sudo dnf upgrade -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 sudo systemctl restart docker
 ```
 
-> ✅ 通常不需要禁用或重新启用开机自启，`systemctl enable docker` 的状态会保留。
+> 通常不需要禁用或重新启用开机自启，`systemctl enable docker` 的状态会保留。
 
 ---
 
@@ -167,7 +238,7 @@ docker --version
 
 ---
 
-### 📌 总结
+### 总结
 
 更新 Docker 的标准流程是：
 
@@ -193,7 +264,7 @@ docker --version
 
 ---
 
-### 🚫 一、停止并禁用 Docker 服务
+### 一、停止并禁用 Docker 服务
 
 ```bash
 sudo systemctl stop docker
@@ -205,7 +276,7 @@ sudo systemctl disable docker
 
 ---
 
-### 🧹 二、卸载 Docker 软件包
+### 二、卸载 Docker 软件包
 
 运行以下命令卸载所有与 Docker 相关的软件包：
 
@@ -221,7 +292,7 @@ sudo dnf remove -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin do
 
 ---
 
-### 🗑️ 三、删除 Docker 数据和配置文件
+### 三、删除 Docker 数据和配置文件
 
 Docker 的镜像、容器、卷和配置文件**不会自动删除**，需要手动清理：
 
@@ -243,7 +314,7 @@ sudo rm -rf /var/lib/docker-rootless
 
 ---
 
-### 🔁 四、（可选）删除 Docker 用户组
+### 四、（可选）删除 Docker 用户组
 
 如果创建了 `docker` 用户组并添加了用户，可以删除它：
 
@@ -259,7 +330,7 @@ sudo groupdel docker
 
 ---
 
-### 🧩 五、（可选）删除 Docker 官方仓库
+### 五、（可选）删除 Docker 官方仓库
 
 如果你不再需要从 Docker 官方源安装软件，可以删除仓库文件：
 
@@ -275,7 +346,7 @@ sudo dnf config-manager --disable docker-ce-stable
 
 ---
 
-### ✅ 六、验证是否卸载干净
+### 六、验证是否卸载干净
 
 ```bash
 # 检查是否还有 Docker 包
@@ -292,7 +363,7 @@ ls /var/lib/docker /etc/docker 2>/dev/null || echo "Docker directories removed"
 
 ---
 
-### 📌 总结：一键卸载脚本（建议分步执行）
+### 总结：一键卸载脚本（建议分步执行）
 
 ```bash
 # 1. 停止服务
