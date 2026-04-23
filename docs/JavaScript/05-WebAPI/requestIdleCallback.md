@@ -20,15 +20,15 @@
 const id = requestIdleCallback(callback[, options]);
 ```
 
-### 参数说明：
+参数说明：
 
-#### 1. `callback(deadline)`
+1. `callback(deadline)`
 - 浏览器在空闲时调用此函数。
 - `deadline` 对象包含两个关键属性：
   - `timeRemaining()`：返回当前空闲周期**还剩多少毫秒**（通常 ≤ 50ms）。
   - `didTimeout`：布尔值，表示是否因超时而被强制执行（见 `timeout` 选项）。
 
-#### 2. `options`（可选）
+2. `options`（可选）
 - `timeout`：指定一个截止时间（毫秒）。  
   如果超过这个时间还没执行，浏览器会**强制调用 callback**（即使主线程很忙），避免任务饿死。
 
@@ -36,7 +36,7 @@ const id = requestIdleCallback(callback[, options]);
 requestIdleCallback(myTask, { timeout: 2000 }); // 最多等 2 秒
 ```
 
-### 返回值：
+3. 返回值：
 - 一个 ID，可用于取消任务：
   ```js
   cancelIdleCallback(id);
@@ -105,23 +105,121 @@ requestIdleCallback(performTasks);
 ## 六、示例：安全地分批渲染大量元素
 
 ```js
-function renderInIdle() {
-  let index = 0;
-  const total = 20000;
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-  const renderChunk = (deadline) => {
-    while (index < total && deadline.timeRemaining() > 1) {
-      createAndAppendElement(); // 创建一个 DOM 元素并插入
-      index++;
-    }
-
-    if (index < total) {
-      requestIdleCallback(renderChunk);
-    }
-  };
-
-  requestIdleCallback(renderChunk);
+/* 获取随机颜色 */
+function getColor () {
+  const r = Math.floor(Math.random() * 255);
+  const g = Math.floor(Math.random() * 255);
+  const b = Math.floor(Math.random() * 255);
+  return `rgba(${r},${g},${b},0.8)`;
 }
+
+/* 获取随机位置 */
+interface Position {
+  width: number;
+  height: number;
+}
+
+function getPosition (position: Position) {
+  const { width, height } = position;
+  return {
+    left: Math.ceil(Math.random() * width) + 'px',
+    top: Math.ceil(Math.random() * height) + 'px'
+  };
+}
+
+/* 色块组件 */
+interface CircleProps {
+  position: Position;
+}
+
+function Circle ({ position }: CircleProps) {
+  const style: React.CSSProperties = React.useMemo(() => {
+    return {
+      background: getColor(),
+      ...getPosition(position),
+      width: 10,
+      height: 10,
+      position: 'absolute'
+    };
+  }, [position]);
+
+  return <div style={style} className="circle" />;
+}
+
+/* 函数式 Index 组件 */
+function Index () {
+  const [renderList, setRenderList] = useState<React.ReactNode[]>([]);
+  const [position, setPosition] = useState<Position>({ width: 0, height: 0 });
+  const boxRef = useRef<HTMLDivElement>(null);
+  const dataListRef = useRef<number[]>([]);
+  const [eachRenderNum] = useState<number>(5);
+
+  // 用于存储最新的 toRenderList 函数引用，解决递归调用时的声明顺序和闭包问题
+  const toRenderListRef = useRef<((index: number, totalTimes: number) => void) | null>(null);
+
+  // 渲染一批新元素
+  const renderNewList = useCallback((startIndex: number) => {
+    const list = dataListRef.current.slice(
+      (startIndex - 1) * eachRenderNum,
+      startIndex * eachRenderNum
+    );
+    return list.map((_, index) => (
+      <Circle position={position} key={(startIndex - 1) * eachRenderNum + index} />
+    ));
+  }, [position, eachRenderNum]);
+
+  // 分批渲染逻辑
+  const toRenderList = useCallback((index: number, totalTimes: number) => {
+    if (index > totalTimes) return;
+
+    setRenderList(prev => [...prev, renderNewList(index)]);
+
+    requestIdleCallback(() => {
+      // 通过 ref 调用最新版本的函数，避免“使用前未声明”及闭包旧值问题
+      if (toRenderListRef.current) {
+        toRenderListRef.current(index + 1, totalTimes);
+      }
+    });
+  }, [renderNewList]);
+
+  // 将最新的 toRenderList 赋值给 ref
+  useEffect(() => {
+    toRenderListRef.current = toRenderList;
+  }, [toRenderList]);
+
+  // 初始化数据和容器尺寸
+  useEffect(() => {
+    if (!boxRef.current) return;
+
+    const { offsetWidth, offsetHeight } = boxRef.current;
+    setPosition({ width: offsetWidth, height: offsetHeight });
+
+    // 创建 20000 条数据
+    const originList: number[] = new Array(20000).fill(1);
+    dataListRef.current = originList;
+
+    const totalTimes: number = Math.ceil(originList.length / eachRenderNum);
+
+    // 启动渲染
+    toRenderList(1, totalTimes);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 仅在挂载时执行一次
+
+  return (
+    <div
+      className="bigData_index"
+      ref={boxRef}
+      style={{ width: '100vw', height: '100vh', position: 'relative' }}
+    >
+      {renderList}
+    </div>
+  );
+}
+
+export default Index;
 ```
 
 ---
