@@ -1,5 +1,3 @@
-# import 和 require 的区别
-
 ES6 的 import 和 CommonJS 的 require 是两种不同的 JavaScript 模块导入方式
 
 1. 语法差异

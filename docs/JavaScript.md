@@ -1,6 +1,6 @@
 ---
 id: javascript
-title: JS 外部链接
+title: 知识点
 ---
 
 - [彻底理解 JavaScript 原型](https://www.cnblogs.com/wilber2013/p/4924309.html)

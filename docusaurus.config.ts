@@ -152,7 +152,7 @@ const config: Config = {
           type: 'docSidebar',
           position: 'left',
           sidebarId: 'hcSidebar',
-          label: 'HTML和CSS',
+          label: 'CSS',
         },
         {
           type: 'docSidebar',
