@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-labelledby="fnTitleFavTri">
+  <title id="fnTitleFavTri">Fantastic Note</title>
+  <defs>
+    <linearGradient id="fnGradFavTri" x1="4" y1="2" x2="60" y2="62" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2E8555"/>
+      <stop offset="0.5" stop-color="#25C2A0"/>
+      <stop offset="1" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+
+  <!--
+    favicon 专用简化版 (16-32px)
+    三色渐变版本，与主标 logo-A-tri-gradient 保持一致。
+    16px 下 V 形缺口与光标块会糊成噪点，故在此版中：
+      · 缺口加深加宽，保留"书签"识别度
+      · 加粗 F 并加高中横臂，小尺寸下笔画不粘连
+  -->
+  <path d="M17 5 H47 A9 9 0 0 1 56 14 V57 L32 43 L8 57 V14 A9 9 0 0 1 17 5 Z" fill="url(#fnGradFavTri)"/>
+
+  <g fill="#FFFFFF">
+    <rect x="18" y="14" width="9" height="26" rx="1.5"/>
+    <rect x="18" y="14" width="28" height="8" rx="1.5"/>
+    <rect x="18" y="25" width="18" height="8" rx="1.5"/>
+    <rect x="39" y="25" width="7" height="8" rx="1.5"/>
+  </g>
+</svg>

@@ -4,6 +4,7 @@
  */
 
 .heroBanner {
+  background: linear-gradient(135deg, #2e8555 0%, #25c2a0 50%, #3b82f6 100%);
   padding: 4rem 0;
   text-align: center;
   position: relative;
@@ -14,10 +15,4 @@
   .heroBanner {
     padding: 2rem;
   }
-}
-
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }

@@ -1,0 +1,23 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="桌面与插件开发">
+  <defs>
+    <linearGradient id="featureDesktopGradient" x1="42" y1="45" x2="158" y2="155" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2E8555"/>
+      <stop offset="0.52" stop-color="#25C2A0"/>
+      <stop offset="1" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="62" fill="#25C2A0" fill-opacity="0.07"/>
+  <g stroke="url(#featureDesktopGradient)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="42" y="48" width="116" height="86" rx="12"/>
+    <path d="M42 70H158"/>
+    <circle cx="57" cy="59" r="2" fill="#2E8555" stroke="none"/>
+    <circle cx="67" cy="59" r="2" fill="#25C2A0" stroke="none"/>
+    <circle cx="77" cy="59" r="2" fill="#3B82F6" stroke="none"/>
+    <path d="M87 87L76 98L87 109"/>
+    <path d="M113 87L124 98L113 109"/>
+    <path d="M104 82L96 114"/>
+    <path d="M100 134V151"/>
+    <path d="M78 151H122"/>
+  </g>
+  <path d="M142 105V115M137 110H147" stroke="#3B82F6" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

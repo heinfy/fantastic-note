@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-labelledby="fnTitleMono">
+  <title id="fnTitleMono">Fantastic Note</title>
+
+  <!-- 单色版：用于 README、单色印刷、深色背景等不支持渐变或需要纯色的场景 -->
+  <path d="M18 6 H46 A8 8 0 0 1 54 14 V56 L32 44 L10 56 V14 A8 8 0 0 1 18 6 Z" fill="currentColor"/>
+  <g fill="#FFFFFF">
+    <rect x="20" y="15" width="7" height="25" rx="1.5"/>
+    <rect x="20" y="15" width="25" height="6.5" rx="1.5"/>
+    <rect x="20" y="24.5" width="15" height="6.5" rx="1.5"/>
+    <rect x="38" y="24.5" width="7" height="6.5" rx="1.5"/>
+  </g>
+</svg>

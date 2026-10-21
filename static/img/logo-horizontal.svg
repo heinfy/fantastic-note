@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 64" width="260" height="64" role="img" aria-labelledby="fnLockTitle">
+  <title id="fnLockTitle">Fantastic Note</title>
+  <defs>
+    <linearGradient id="fnGradLock" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#35A46A"/>
+      <stop offset="0.55" stop-color="#2E8555"/>
+      <stop offset="1" stop-color="#25C2A0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 图标 -->
+  <g transform="translate(0,0)">
+    <path d="M18 6 H46 A8 8 0 0 1 54 14 V56 L32 44 L10 56 V14 A8 8 0 0 1 18 6 Z" fill="url(#fnGradLock)"/>
+    <g fill="#FFFFFF">
+      <rect x="20" y="15" width="7" height="25" rx="1.5"/>
+      <rect x="20" y="15" width="25" height="6.5" rx="1.5"/>
+      <rect x="20" y="24.5" width="15" height="6.5" rx="1.5"/>
+      <rect x="38" y="24.5" width="7" height="6.5" rx="1.5"/>
+    </g>
+  </g>
+
+  <!-- 字标：文本需按环境字体渲染，如需完全一致请转曲 -->
+  <text x="72" y="34"
+        font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="26" font-weight="700" letter-spacing="-0.5"
+        fill="#1B2420">Fantastic</text>
+  <text x="72" y="54"
+        font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="13" font-weight="500" letter-spacing="1.6"
+        fill="#6B7A72">NOTE · 一直走的技术博客</text>
+</svg>

@@ -28,3 +28,30 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Compact footer for the small set of existing links. */
+.footer > .container > .footer__links {
+  margin-bottom: 1rem;
+}
+
+.footer__link-separator {
+  color: var(--ifm-footer-link-color);
+  margin: 0 0.85rem;
+  opacity: 0.55;
+}
+
+.footer__link-item {
+  transition: color 0.2s ease;
+}
+
+.footer__copyright {
+  font-size: 0.875rem;
+  opacity: 0.72;
+}
+
+@media screen and (max-width: 996px) {
+  .footer__link-item {
+    margin-inline: auto;
+    text-align: center;
+  }
+}

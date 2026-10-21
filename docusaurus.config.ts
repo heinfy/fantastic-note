@@ -6,9 +6,9 @@ import { themes as prismThemes } from 'prism-react-renderer';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: '一直走的技术博客',
-  tagline: 'Include React, Vue.js, Typescript, Nodejs, Python, Docker ...',
-  favicon: 'img/favicon.ico',
+  title: 'Fantastic Note',
+  tagline: '一个专注于前端技术的知识库，记录前端开发中遇到的各种问题和解决方案。',
+  favicon: 'img/favicon.svg',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -106,9 +106,9 @@ const config: Config = {
     } satisfies ZoomConfig,
 
     navbar: {
-      title: 'Fantastic',
+      title: 'Fantastic Note',
       logo: {
-        alt: 'Logo',
+        alt: 'Fantastic Note Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -121,51 +121,58 @@ const config: Config = {
         {
           type: 'docSidebar',
           position: 'left',
-          sidebarId: 'jsSidebar',
-          label: 'JavaScript',
-        },
-        {
-          type: 'docSidebar',
-          position: 'left',
           sidebarId: 'tsSidebar',
           label: 'TypeScript',
         },
         {
           type: 'docSidebar',
           position: 'left',
-          sidebarId: 'vueSidebar',
-          label: 'Vue',
+          sidebarId: 'electronSidebar',
+          label: 'Electron',
         },
         {
           type: 'docSidebar',
           position: 'left',
-          sidebarId: 'liunxSidebar',
-          label: 'Liunx',
+          sidebarId: 'vscodePluginSidebar',
+          label: 'VSCode Plugin',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'pySidebar',
+          type: 'dropdown',
           position: 'left',
-          label: 'Python',
+          label: '更多',
+          items: [
+            {
+              type: 'docSidebar',
+              sidebarId: 'jsSidebar',
+              label: 'JavaScript',
+            },
+            {
+              type: 'docSidebar',
+              sidebarId: 'vueSidebar',
+              label: 'Vue',
+            },
+            {
+              type: 'docSidebar',
+              sidebarId: 'liunxSidebar',
+              label: 'Liunx',
+            },
+            {
+              type: 'docSidebar',
+              sidebarId: 'pySidebar',
+              label: 'Python',
+            },
+            {
+              type: 'docSidebar',
+              sidebarId: 'hcSidebar',
+              label: 'CSS',
+            },
+            {
+              type: 'docSidebar',
+              sidebarId: 'otherSidebar',
+              label: '其他',
+            },
+          ],
         },
-        {
-          type: 'docSidebar',
-          position: 'left',
-          sidebarId: 'hcSidebar',
-          label: 'CSS',
-        },
-        {
-          type: 'docSidebar',
-          position: 'left',
-          sidebarId: 'otherSidebar',
-          label: '其他',
-        },
-        // {
-        //   type: 'docSidebar',
-        //   sidebarId: 'tutorialSidebar',
-        //   position: 'left',
-        //   label: '教程'
-        // },
         // { to: '/blog', label: '博客', position: 'left' },
         {
           href: 'https://github.com/heinfy/fantastic-note',
@@ -178,50 +185,19 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: '文档',
-          items: [
-            {
-              label: 'docusaurus 教程',
-              to: '/docs/Tutorial/intro',
-            },
-          ],
+          label: '我的主页',
+          href: 'https://heinfy.top',
         },
         {
-          title: '关于我',
-          items: [
-            {
-              label: '我的主页',
-              href: 'https://heinfy.top',
-            },
-            {
-              label: 'react-admin-app',
-              href: 'https://github.com/heinfy/react-admin-app',
-            },
-            {
-              label: 'console-view',
-              href: 'https://github.com/heinfy/console-view',
-            },
-          ],
+          label: '我的简历',
+          href: 'https://resume.heinfy.top/',
         },
         {
-          title: 'More',
-          items: [
-            {
-              label: '博客教程',
-              to: '/blog',
-            },
-            {
-              label: '我的简历',
-              href: 'https://resume.heinfy.top/',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/heinfy',
-            },
-          ],
+          label: 'GitHub',
+          href: 'https://github.com/heinfy',
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} fantastic-note, Inc. Built with Docusaurus.`,
+      copyright: `© ${new Date().getFullYear()} fantastic-note · Built with Docusaurus`,
     },
     prism: {
       theme: prismThemes.github,
