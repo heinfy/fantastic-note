@@ -1,0 +1,8 @@
+{
+  "label": "数据类型常用方法",
+  "position": 2.5,
+  "link": {
+    "type": "generated-index",
+    "description": "Number、String、List、Tuple、Set、Dictionary 六大标准数据类型的常用方法与示例。"
+  }
+}

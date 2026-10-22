@@ -1,0 +1,8 @@
+{
+  "label": "内置函数",
+  "position": 4.5,
+  "link": {
+    "type": "generated-index",
+    "description": "Python 内置函数分类速查：数学运算、类型转换、逻辑判断、迭代处理、对象与反射、类与描述符、输入输出、作用域与执行。"
+  }
+}
