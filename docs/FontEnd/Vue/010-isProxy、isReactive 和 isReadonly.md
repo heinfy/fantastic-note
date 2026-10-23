@@ -1,162 +1,39 @@
-`isProxy`、`isReactive` 和 `isReadonly` 是 Vue 3 提供的 **响应式对象类型检查工具函数**，用于在运行时判断一个对象是否由 Vue 的响应式系统创建，以及它的具体类型。
-
+---
+sidebar_position: 10
 ---
 
-## 一、核心概念回顾
+# isProxy、isReactive 与 isReadonly
 
-Vue 3 的响应式系统基于 **ES6 Proxy**，主要创建三类代理对象：
+这些函数判断 Vue 创建的响应式对象或 ref 的性质，不能用来检测任意 JavaScript `Proxy`。
 
-| 类型                          | 创建方式                  | 特点                 |
-| ----------------------------- | ------------------------- | -------------------- |
-| **Reactive Proxy**            | `reactive(obj)`           | 可读可写，深度响应式 |
-| **Readonly Proxy**            | `readonly(obj)`           | 只读，修改会警告     |
-| **Shallow Reactive/Readonly** | `shallowReactive(obj)` 等 | 仅根层级响应式       |
+## 三种判断
 
-> 所有这些对象都是 **Proxy 实例**，但用途不同。
-
----
-
-## 二、三个函数详解
-
-### 1. `isReactive(value)`
-
-判断一个对象是否是由 **`reactive()`、`ref()`（内部对象）、`shallowReactive()`** 创建的**可变响应式代理**。
+- `isProxy(value)`：是否为 `reactive`、`readonly` 或浅层版本创建的 Vue 代理。
+- `isReactive(value)`：是否为响应式代理，也能识别包裹响应式代理的只读视图。
+- `isReadonly(value)`：是否为只读代理或没有 setter 的 computed ref。
 
 ```js
-import { reactive, ref, isReactive } from 'vue';
+import {
+  computed, isProxy, isReactive, isReadonly,
+  reactive, readonly, ref, shallowReactive
+} from 'vue';
 
-const state = reactive({ a: 1 });
-const shallow = shallowReactive({ b: 2 });
-const readOnly = readonly({ c: 3 });
-const plain = { d: 4 };
+const state = reactive({ count: 0 });
+const view = readonly(state);
+const plainView = readonly({ count: 0 });
+const count = computed(() => state.count);
 
-console.log(isReactive(state)); // true
-console.log(isReactive(shallow)); // true
-console.log(isReactive(readOnly)); // false ❌
-console.log(isReactive(plain)); // false
-
-// ref 包装的对象也是 reactive
-const objRef = ref({ e: 5 });
-console.log(isReactive(objRef.value)); // true ✅
+console.log(isProxy(state), isReactive(state), isReadonly(state)); // true true false
+console.log(isProxy(view), isReactive(view), isReadonly(view)); // true true true
+console.log(isProxy(plainView), isReactive(plainView)); // true false
+console.log(isProxy(count), isReadonly(count)); // false true
+console.log(isReactive(shallowReactive({}))); // true
+console.log(isReactive(ref({}).value)); // true
+console.log(isProxy(ref(1))); // false，ref 自身不是 Proxy。
 ```
 
-> ✅ **关键点**：
->
-> - `isReactive` 返回 `true` 表示该对象是**可写的响应式对象**
-> - `readonly` 对象返回 `false`
+## 常见误区
 
----
+`isReactive` 与 `isReadonly` 不互斥；只读视图可以保留原响应式对象的行为。`isProxy(value)` 也不等价于 `isReactive(value) || isReadonly(value)`，因为只读 computed ref 不是 Proxy。
 
-### 2. `isReadonly(value)`
-
-判断一个对象是否是由 **`readonly()` 或 `shallowReadonly()`** 创建的**只读代理**。
-
-```js
-import { readonly, shallowReadonly, isReadonly } from 'vue';
-
-const readOnly = readonly({ a: 1 });
-const shallowRO = shallowReadonly({ b: 2 });
-const reactiveObj = reactive({ c: 3 });
-
-console.log(isReadonly(readOnly)); // true
-console.log(isReadonly(shallowRO)); // true
-console.log(isReadonly(reactiveObj)); // false
-```
-
-> ✅ **关键点**：
->
-> - 只读对象**不能被修改**（严格模式下会报错，非严格模式下静默失败 + 警告）
-> - 常用于保护状态不被意外更改（如 store 的 state）
-
----
-
-### 3. `isProxy(value)`
-
-判断一个对象是否是 **Vue 创建的任何类型的 Proxy**（包括 `reactive`、`readonly`、`shallowXXX` 等）。
-
-```js
-import { reactive, readonly, shallowReactive, isProxy } from 'vue';
-
-const r = reactive({ a: 1 });
-const ro = readonly({ b: 2 });
-const sr = shallowReactive({ c: 3 });
-const plain = { d: 4 };
-
-console.log(isProxy(r)); // true
-console.log(isProxy(ro)); // true
-console.log(isProxy(sr)); // true
-console.log(isProxy(plain)); // false
-```
-
-> ✅ **关键点**：
->
-> - `isProxy` 是最宽泛的检查
-> - 它等价于：`isReactive(value) || isReadonly(value)`
-
----
-
-## 三、关系图解
-
-```text
-                ┌─────────────┐
-                │   isProxy   │ ← 最宽泛：只要是 Vue Proxy 就 true
-                └──────┬──────┘
-                       │
-        ┌──────────────┴──────────────┐
-        ▼                             ▼
-┌───────────────┐           ┌──────────────────┐
-│  isReactive   │           │   isReadonly     │ ← 互斥（一个对象不会同时为两者）
-└───────────────┘           └──────────────────┘
-（可写响应式）               （只读响应式）
-```
-
-> 💡 一个对象**不可能同时是 `isReactive` 和 `isReadonly`**
-
----
-
-## 四、典型使用场景
-
-### 场景 1：编写安全的通用函数
-
-```js
-function cloneDeep(obj) {
-  if (isProxy(obj)) {
-    // 如果是响应式对象，先转为普通对象再克隆
-    return JSON.parse(JSON.stringify(obj));
-  }
-  // ...普通克隆逻辑
-}
-```
-
-### 场景 2：调试或日志
-
-```js
-console.log('State type:', {
-  isProxy: isProxy(state),
-  isReactive: isReactive(state),
-  isReadonly: isReadonly(state)
-});
-```
-
-### 场景 3：避免重复代理
-
-```js
-function makeReactive(obj) {
-  if (isProxy(obj)) {
-    return obj; // 已是响应式，无需再包装
-  }
-  return reactive(obj);
-}
-```
-
----
-
-## 五、、总结表
-
-| 函数         | 检测目标         | 返回 true 的情况                     | 典型创建方式                        |
-| ------------ | ---------------- | ------------------------------------ | ----------------------------------- |
-| `isProxy`    | 是否为 Vue Proxy | `reactive`, `readonly`, `shallowXXX` | 所有 Proxy 响应式对象               |
-| `isReactive` | 是否为可写响应式 | `reactive`, `shallowReactive`        | `reactive()`, `ref({})` 的 `.value` |
-| `isReadonly` | 是否为只读响应式 | `readonly`, `shallowReadonly`        | `readonly()`                        |
-
----
+这些判断适合调试数据来源与验证接口约束。无需先判断代理来避免重复 `reactive()`：对已有响应式代理调用 `reactive()` 会返回同一代理。需要处理 ref 时使用 [isRef](009-isRef、unref%20和%20toValue.md)。

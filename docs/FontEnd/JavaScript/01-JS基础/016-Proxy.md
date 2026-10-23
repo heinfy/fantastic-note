@@ -1,4 +1,4 @@
-# Proxy 的工作原理
+# Proxy
 
 `Proxy` 通过两个参数创建：
 
@@ -7,9 +7,7 @@
 
 捕获器是方法，这些方法会在对目标对象执行特定操作时被调用。
 
-捕获器是方法，这些方法会在对目标对象执行特定操作时被调用。
-
-### 示例代码
+## 示例代码
 
 以下是一个简单的示例，展示了如何使用 `Proxy` 来监听对象的属性读写操作：
 
@@ -41,7 +39,7 @@ proxy.message2 = "world";    // Setting property 'message2' to 'world'
 console.log(proxy.message2); // Getting property 'message2' -> world
 ```
 
-### 常用的捕获器
+## 常用的捕获器
 
 `Proxy` 提供了多种捕获器，每个捕获器对应一种操作。以下是一些常用的捕获器：
 
@@ -102,7 +100,7 @@ apply(target, thisArg, argumentsList) {
 }
 ```
 
-### 监听数据变化的实际应用
+## 监听数据变化的实际应用
 
 可以使用 `Proxy` 实现对对象或数组的深度监听，以便在数据变化时进行特定操作（如自动更新 UI、记录日志等）。以下是一个监听嵌套对象变化的示例：
 
@@ -143,7 +141,7 @@ obj.details.age = 31;        // Property 'age' set to '31'
 
 在这个示例中，`createReactiveObject` 函数会递归地为嵌套对象创建 `Proxy`，从而实现深度监听。
 
-### 总结
+## 总结
 
 `Proxy` 提供了一种灵活的方式来拦截和自定义 JavaScript 对象的基本操作。通过使用 `Proxy`，我们可以轻松实现对数据变化的监听，并在数据发生变化时执行特定的逻辑。这对于构建响应式应用程序和框架（如 Vue.js、MobX 等）非常有用。
 

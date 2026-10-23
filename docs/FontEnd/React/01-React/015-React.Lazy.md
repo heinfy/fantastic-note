@@ -1,3 +1,5 @@
+# React.lazy
+
 `React.lazy` 是 React 提供的**内置懒加载（Lazy Loading）机制**，用于实现**组件的动态导入和代码分割（Code Splitting）**，从而优化应用的初始加载性能。
 
 ---

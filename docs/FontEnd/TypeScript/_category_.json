@@ -1,8 +1,8 @@
 {
-  "label": "Typescript",
+  "label": "TypeScript",
   "position": 1,
   "link": {
     "type": "generated-index",
-    "description": "Typescript"
+    "description": "TypeScript 基础类型、类型声明、函数与类、类型推断及 React 实践。"
   }
 }

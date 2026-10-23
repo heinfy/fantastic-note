@@ -1,33 +1,36 @@
-`<keep-alive>` 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们。它自身不会渲染一个 DOM 元素，也不会出现在父组件链中，不会渲染到 DOM 树中。
+---
+sidebar_position: 2
+---
 
-它的作用是在内存中缓存组件（不让组件销毁），等到下次渲染是，还会保留在原来的状态。
+# 路由组件缓存
 
-当组件在 `<keep-alive>` 内被切换，它的 `activated` 和 `deactivated` 这两个生命周期钩子函数将会被对应执行。
+`KeepAlive` 缓存路由组件实例，使返回页面时可以恢复组件状态。它是 Vue 内置组件，路由场景需要配合 `RouterView`。
 
-使用：
+## Vue Router 4 写法
 
-```html
-<keep-alive include="mainList">
-  <router-view class="child"></router-view>
-</keep-alive>
+```vue
+<RouterView v-slot="{ Component }">
+  <KeepAlive include="MainList" :max="10">
+    <component :is="Component" />
+  </KeepAlive>
+</RouterView>
 ```
 
-属性：
+缓存实际路由组件，而不是 `RouterView` 本身。Vue Router 3 中常见的写法是直接用 `<keep-alive><router-view /></keep-alive>`。
 
-- `include` - 字符串或正则表达式。只有名称匹配的组件会被缓存。
-- `exclude` - 字符串或正则表达式。任何名称匹配的组件都不会被缓存。
-- `include` 和 `exclude` 属性允许组件有条件地缓存。二者都可以用逗号分隔字符串、正则表达式或一个数组来表示
-- `max` - 数字。最多可以缓存多少组件实例，一旦这个数字达到了，在新实例被创建之前，已缓存组件中最久没有被访问的实例会被销毁掉。
+## 缓存范围与生命周期
 
-组件匹配首先检查组件自身的 `name` 选项（**不是 route 的 name**），如果 `name` 选项不可用，则匹配它的局部注册名称 (父组件 `components` 选项的键值)。匿名组件不能被匹配。
+- `include` / `exclude`：匹配组件的 `name`，不是路由配置的 `name`；支持逗号分隔字符串、正则表达式或数组。
+- `max`：限制实例数量，超过时移除最近最少使用的实例。
+- `onActivated` / `activated`：首次挂载与从缓存恢复时执行。
+- `onDeactivated` / `deactivated`：组件进入缓存或卸载时执行。
 
-设置了 `<keep-alive>` 缓存的组件，会新增 `activated` 和 `deactivate` 生命周期钩子：
+Vue 3.3+ 可在页面中用 `defineOptions({ name: 'MainList' })` 显式设置名称。列表重取数据、连接暂停或恢复可以放在激活、停用钩子中。
 
-`activated` 和 `deactivate` 只要页面切换、加载组件就会执行一次
+## 刷新与状态边界
 
-第一次进入：`beforeRouterEnter -> created -> … -> activated-> … -> deactivated` 后续进入时：`beforeRouterEnter -> activated -> deactivated`
+改变组件 key 可创建新的缓存实例，但旧 key 对应的实例可能仍留在缓存中，需结合容量或缓存范围管理。`$forceUpdate()` 只强制渲染，不会清空实例状态。
 
-## 链接
+表单等响应式状态可以保留；滚动位置等 DOM 状态需要按场景单独保存与恢复。通用说明见 [内置组件](../020-内置组件.md)。
 
-- [vue 中前进刷新、后退缓存用户浏览数据和浏览位置的实践](https://juejin.im/post/5b2ce07ce51d45588a7dbf76)
-- [keep-alive 组件级缓存](https://www.cnblogs.com/yf-html/p/9353627.html)
+参考：[RouterView 插槽](https://router.vuejs.org/zh/guide/advanced/router-view-slot.html)。

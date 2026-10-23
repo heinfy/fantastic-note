@@ -1,3 +1,5 @@
+# Hydration
+
 **Hydration（水合）** 是现代前端框架（如 Next.js）在服务端渲染（SSR）或静态生成（SSG）场景下的**激活过程**。
 
 简单来说，它的作用是：**将服务器生成的“静态”HTML 页面，变成浏览器中“动态”且可交互的 React 应用**。
@@ -6,7 +8,7 @@
 
 ---
 
-### 🌊 什么是 Hydration？
+## 🌊 什么是 Hydration？
 
 你可以把服务器返回的 HTML 想象成一个**“干燥的骨架”**。
 - **服务器**：负责把肉（HTML 结构）和血（初始数据）填进去，快速展示给用户看（首屏快）。
@@ -17,7 +19,7 @@ Hydration 的过程**不是**删除旧的 DOM 重新渲染，而是**复用**服
 
 ---
 
-### 🔄 Hydration 的完整流程
+## 🔄 Hydration 的完整流程
 
 这是一个从用户敲回车到页面完全可用的过程：
 
@@ -38,7 +40,7 @@ Hydration 的过程**不是**删除旧的 DOM 重新渲染，而是**复用**服
     -   **绑定 (Binding)**：如果两者结构一致，React 会在现有的 DOM 节点上绑定事件监听器，并关联组件的状态。
     -   **完成**：页面变成完全可交互的 SPA（单页应用）。
 
-### 🚀 App Router 中的进化：Partial Hydration (部分水合)
+## 🚀 App Router 中的进化：Partial Hydration (部分水合)
 
 在 Next.js 的 App Router 中，Hydration 变得更智能了，不再需要“全量”水合。
 
@@ -53,7 +55,7 @@ Hydration 的过程**不是**删除旧的 DOM 重新渲染，而是**复用**服
 
 ---
 
-### ⚙️ 底层是如何实现的？
+## ⚙️ 底层是如何实现的？
 
 Hydration 的实现依赖于 React 对 DOM 的“接管”机制：
 
@@ -71,7 +73,7 @@ Hydration 的实现依赖于 React 对 DOM 的“接管”机制：
 
 ---
 
-### ⚠️ 常见坑：Hydration Mismatch (水合不匹配)
+## ⚠️ 常见坑：Hydration Mismatch (水合不匹配)
 
 这是开发中最常见的错误，浏览器会报 `Text content did not match` 或 `Expected server HTML to contain a matching...`。
 
@@ -86,7 +88,7 @@ Hydration 的实现依赖于 React 对 DOM 的“接管”机制：
 2.  **条件渲染延迟**：涉及 `window`、`document` 或 `localStorage` 的代码（只在浏览器存在），应该放在 `useEffect` 里，或者使用 `Suspense` fallback。
 3.  **使用 `use client` 明确边界**：在 App Router 中，明确划分服务端和客户端组件，避免逻辑混淆。
 
-### 总结
+## 总结
 
 | 阶段 | 状态 | 作用 |
 | :--- | :--- | :--- |

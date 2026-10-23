@@ -1,8 +1,8 @@
 {
-  "label": "Vue 内置语法",
+  "label": "Vue 2 全局 API",
   "position": 201,
   "link": {
     "type": "generated-index",
-    "description": "Vue 内置语法"
+    "description": "Vue 2 旧项目维护资料：组件、指令、构造器、插件及选项式侦听。"
   }
 }

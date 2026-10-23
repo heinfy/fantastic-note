@@ -1,4 +1,6 @@
-### Set
+# Set 和 Map
+
+## Set
 
 Set 本身是一个构造函数，用来生成 Set 数据结构。Set 数据结构类似于数组，但是成员的值都是唯一的，没有重复的值。
 
@@ -17,7 +19,7 @@ for (let i of s) {
 }
 ```
 
-#### 参数
+### 构造函数参数
 
 ```js
 // 接受数组作为参数
@@ -33,7 +35,7 @@ Array.from(new Set(set));
 let arr = [...new Set(set)];
 ```
 
-#### Set 的方法
+### Set 的方法
 
 - `add(value)`：添加某个值，返回 Set 结构本身。
 
@@ -59,7 +61,7 @@ let intersect = new Set([...a].filter(x => b.has(x))); // set {2, 3}
 let difference = new Set([...a].filter(x => !b.has(x))); // Set {1}
 ```
 
-### WeakSet
+## WeakSet
 
 WeakSet 结构与 Set 类似，也是不重复的值的集合。但是，它与 Set 有两个区别。
 
@@ -72,7 +74,7 @@ WeakSet 结构有以下三个方法。
 - WeakSet.prototype.delete(value)：清除 WeakSet 实例的指定成员，清除成功返回 true，如果在 WeakSet 中找不到该成员或该成员不是对象，返回 false。
 - WeakSet.prototype.has(value)：返回一个布尔值，表示某个值是否在 WeakSet 实例之中。
 
-### Map
+## Map
 
 ES6 提供了 Map 数据结构，Object 结构提供了“字符串—值”的对应，Map 结构提供了“值—值”的对应，是一种更完善的 Hash 结构实现。
 
@@ -106,7 +108,7 @@ map.has('title'); // true
 map.get('title'); // "Author"
 ```
 
-#### Map 的方法
+### Map 的方法
 
 - `map.size`
 - `map.set(key, value)`
@@ -115,7 +117,7 @@ map.get('title'); // "Author"
 - `map.delete(key)`： 删除某个键，返回 true，如果删除失败，返回 false
 - `map.clear()`： clear 方法清除所有成员，没有返回值
 
-### WeakMap
+## WeakMap
 
 WeakMap 结构与 Map 结构类似，也是用于生成键值对的集合。
 

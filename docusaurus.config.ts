@@ -153,8 +153,8 @@ const config: Config = {
             },
             {
               type: 'docSidebar',
-              sidebarId: 'liunxSidebar',
-              label: 'Liunx',
+              sidebarId: 'linuxSidebar',
+              label: 'Linux',
             },
             {
               type: 'docSidebar',

@@ -1,4 +1,6 @@
-### ref 是什么
+# React.useRef
+
+## ref 是什么
 
 在 React 中，ref 是用来访问组件实例或 DOM 元素的方式。它可以用于访问组件的方法或属性，以及直接操作 DOM 元素。
 
@@ -6,7 +8,7 @@
 - **访问子组件的方法**：通过 ref 可以访问子组件中暴露的方法或属性（`forwardRef` 和 `useImperativeHandle`）。
 
 
-### 何时使用 useRef
+## 何时使用 useRef
 
 测试代码：
 
@@ -54,7 +56,7 @@ const showAlert = () => {
 
 React 的 `useState` 返回的 `count` 是**不可变的快照**，每次 re-render 都会生成新的 `count` 和新的 `showAlert` 函数。但 `setTimeout` 里的函数只“记得”它创建时的那个 `count`。
 
-#### 如何让点击的时候弹出实时的 count？
+### 如何让点击的时候弹出实时的 count？
 
 ```jsx
 import React, { useState, useEffect, useRef } from 'react';
@@ -85,7 +87,7 @@ const App = () => {
 export default App;
 ```
 
-#### 获取上一次的索引
+### 获取上一次的索引
 
 ```jsx
 import React, { useState, useEffect, useRef } from 'react';
@@ -112,7 +114,7 @@ export default App;
 
 原因： hooks 组件在更新时，先更新 UI，后执行副作用！
 
-### createRef 与 useRef 的区别
+## createRef 与 useRef 的区别
 
 官网的定义如下:
 
@@ -166,7 +168,7 @@ function App() {
 上述 valueRef 会随着 App 函数的 Render 而重复初始化，这也是 Hooks 的独特之处，虽然用在普通函数中，但在 React 引擎中会得到超出普通函数的表现，比如初始化仅执行一次，或者引用不变。
 
 
-### 总结
+## 总结
 
 useRef 不仅仅是用来管理 DOM ref 的，它还相当于 this , 可以存放任何变量.
 
@@ -174,7 +176,7 @@ useRef 可以很好的解决闭包带来的不方便性.你可以在各种库中
 
 值得注意的是，当 useRef 的内容发生变化时,它不会通知您。更改.current 属性不会导致重新呈现。因为他一直是一个引用 .
 
-### 链接
+## 链接
 
 - [你不知道的 useRef](https://zhuanlan.zhihu.com/p/105276393)
 - [React.useRef and React.createRef: The Difference](https://blog.bitsrc.io/react-useref-and-react-createref-the-difference-afedb9877d0f)

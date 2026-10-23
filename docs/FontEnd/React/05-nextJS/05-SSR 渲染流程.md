@@ -1,8 +1,10 @@
+# SSR 渲染流程
+
 React 服务端渲染（Server-Side Rendering, SSR）是指**在服务器上将 React 组件渲染为 HTML 字符串，再发送给浏览器**，从而提升首屏加载速度、SEO 友好性和用户体验。
 
 ---
 
-### 一、SSR 的核心流程
+## 一、SSR 的核心流程
 
 ```
 用户请求 → 服务器
@@ -19,9 +21,9 @@ React 服务端渲染（Server-Side Rendering, SSR）是指**在服务器上将 
 
 ---
 
-### 二、原生实现 SSR
+## 二、原生实现 SSR
 
-#### 1. 服务端（Node.js）
+### 1. 服务端（Node.js）
 ```js
 // server.js
 import express from 'express';
@@ -55,7 +57,7 @@ app.get('/', (req, res) => {
 });
 ```
 
-#### 2. 客户端（浏览器）
+### 2. 客户端（浏览器）
 ```js
 // client.js
 import React from 'react';
@@ -76,9 +78,9 @@ hydrateRoot(
 
 ---
 
-### 三、推荐方案：使用成熟框架
+## 三、推荐方案：使用成熟框架
 
-#### ✅ 1. **Next.js（官方推荐，最流行）**
+### ✅ 1. **Next.js（官方推荐，最流行）**
 - 内置 SSR、SSG、ISR、API Routes、文件系统路由等
 - 开箱即用，零配置
 
@@ -99,7 +101,7 @@ export default function Home({ data }) {
 - 访问 `/` → 自动 SSR
 - 部署支持 Vercel、Node.js 服务器等
 
-#### ✅ 2. **Remix（新兴全栈框架）**
+### ✅ 2. **Remix（新兴全栈框架）**
 - 基于 Web 标准（Fetch、Form），强调用户体验
 - 自动处理数据加载、表单提交、错误边界等
 
@@ -117,7 +119,7 @@ export default function Index() {
 
 ---
 
-### 四、SSR 的关键注意事项
+## 四、SSR 的关键注意事项
 
 | 问题 | 解决方案 |
 |------|--------|
@@ -134,7 +136,7 @@ export default function Index() {
 
 ---
 
-### 五、、总结
+## 五、总结
 
 - **不要手写原生 SSR**：复杂度高，易出错
 - **优先使用 Next.js 或 Remix**：它们解决了 90% 的 SSR 工程问题

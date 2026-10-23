@@ -1,3 +1,5 @@
+# Next.js 应用首屏优化策略
+
 在 Next.js 中进行**服务器端首屏优化（Server-Side First Paint Optimization）**，特别是针对**视频、图片等媒体资源的加载优化**，是提升用户体验和 Core Web Vitals（如 LCP、FCP）的关键。下面从几个方面详细说明：
 
 ---

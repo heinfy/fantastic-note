@@ -3,6 +3,6 @@
   "position": 200,
   "link": {
     "type": "generated-index",
-    "description": "组合函数"
+    "description": "Vue 3 组合函数的编写约定与内置辅助函数。"
   }
 }

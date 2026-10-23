@@ -1,122 +1,62 @@
-Vue 3 中的 `provide` 和 `inject` 是一种**跨层级组件通信**的方式，用于祖先组件向任意后代组件传递数据（包括响应式数据），而无需通过逐层 prop 传递。
-
+---
+sidebar_position: 16
 ---
 
-## 一、基本用法
+# provide 与 inject
 
-### 1. 祖先组件：使用 `provide`
+依赖注入用于祖先组件向后代组件提供上下文，避免逐层传递 props。普通父子交互优先使用 props 与 emits。
 
-```js
-// Parent.vue
-import { provide, ref } from 'vue'
+## 提供只读状态与修改方法
 
-export default {
-  setup() {
-    const message = ref('Hello from parent')
-
-    // 提供一个值给后代组件
-    provide('message', message)
-
-    return {
-      message
-    }
-  }
-}
-```
-
-> 注意：`provide` 的第一个参数是 **注入 key**（通常建议使用 Symbol 或字符串常量避免命名冲突），第二个参数是要提供的值。
-
----
-
-### 2. 后代组件：使用 `inject`
+使用共享的 Symbol 作为 key 可避免命名冲突。
 
 ```js
-// Child.vue
-import { inject } from 'vue'
-
-export default {
-  setup() {
-    // 注入祖先提供的值
-    const message = inject('message', 'default value') // 第二个参数是默认值（可选）
-
-    return {
-      message
-    }
-  }
-}
+// keys.js
+export const countKey = Symbol('count');
 ```
 
----
+```vue
+<!-- Parent.vue -->
+<script setup>
+import { provide, readonly, ref } from 'vue';
+import { countKey } from './keys';
+import Child from './Child.vue';
 
-## 二、响应式支持
+const count = ref(0);
+provide(countKey, {
+  count: readonly(count),
+  increment: () => count.value++
+});
+</script>
 
-### 1. 提供响应式对象（推荐）
-
-如果提供的是 `ref` 或 `reactive` 对象，**注入方会自动获得响应性**：
-
-```js
-// Parent.vue
-const count = ref(0)
-provide('count', count)
+<template>
+  <Child />
+</template>
 ```
 
-```js
-// GrandChild.vue
-const count = inject('count')
-// count 是响应式的，当父组件修改 count.value，这里会自动更新
+```vue
+<!-- Child.vue，也可以在任意后代组件中注入 -->
+<script setup>
+import { inject } from 'vue';
+import { countKey } from './keys';
+
+const context = inject(countKey);
+if (!context) throw new Error('缺少 count 上下文');
+const { count, increment } = context;
+</script>
+
+<template>
+  <button @click="increment">计数：{{ count }}</button>
+</template>
 ```
 
-### 2. 允许后代组件修改 provide 的值（谨慎使用）
+`provide()` 不会自动将普通值变成响应式数据。提供 ref 时，注入方获得同一 ref，JavaScript 中仍通过 `.value` 访问；提供响应式对象时保留该代理。
 
-如果希望后代组件能修改 provide 的数据，可以提供一个**修改方法**或**整个 ref**：
+## 查找规则与默认值
 
-#### 方式一：提供 setter 函数
+- 同一 key 从最近的祖先提供者查找；`app.provide()` 提供应用级依赖。
+- 未找到时，`inject(key, defaultValue)` 返回默认值。
+- 默认值需要工厂函数时，使用 `inject(key, () => createValue(), true)`。
+- 在 `setup()` 中同步调用 `provide` / `inject`；异步逻辑应先取得注入结果，再复用引用。
 
-```js
-// Parent.vue
-const count = ref(0)
-
-provide('count', readonly(count)) // 防止直接修改
-provide('setCount', (value) => {
-  count.value = value
-})
-```
-
-```js
-// Child.vue
-const count = inject('count')
-const setCount = inject('setCount')
-
-// 使用
-setCount(10)
-```
-
-#### 方式二：直接提供 ref（不推荐，破坏封装）
-
-```js
-provide('count', count) // 后代可以直接修改 count.value
-```
-
-> 更安全的做法是使用 `readonly` 包裹：
-
-```js
-import { readonly } from 'vue'
-provide('count', readonly(count))
-```
-
----
-
-## 三、注意事项
-
-- `provide/inject` **不是响应式 prop 的替代品**，应仅用于跨多层组件传递全局/上下文数据（如主题、用户信息、i18n 等）。
-- 不要在应用的根组件以外滥用，避免造成“隐式依赖”，降低组件可复用性。
-- 如果只是父子组件通信，优先使用 props / emits。
-
----
-
-## 四、典型应用场景
-
-- 主题切换（ThemeContext）
-- 用户登录状态
-- 表单校验上下文（如 Element Plus 的 Form）
-- 多级菜单或嵌套 Tab 的联动控制
+常用于主题、用户信息、表单上下文和嵌套组件联动。组件外的应用注入上下文见 [hasInjectionContext](017-hasInjectionContext.md)。

@@ -1,4 +1,4 @@
-# JavasCript 关键字
+# JavaScript 关键字
 
 ## 作用域
 

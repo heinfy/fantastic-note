@@ -1,3 +1,5 @@
+# requestIdleCallback
+
 `requestIdleCallback` 是浏览器提供的一种 **协作式调度（cooperative scheduling）** API，用于在浏览器**主线程空闲时**执行低优先级任务，避免阻塞关键操作（如用户交互、动画、渲染等），从而提升页面响应性和流畅度。
 
 ---
@@ -52,9 +54,9 @@ requestIdleCallback(myTask, { timeout: 2000 }); // 最多等 2 秒
 3. 样式计算、布局（reflow）
 4. 绘制（paint）、合成（composite）
 
-✅ `requestIdleCallback` 的回调会在 **一帧的末尾、如果还有剩余时间** 时执行。
+ `requestIdleCallback` 的回调会在 **一帧的末尾、如果还有剩余时间** 时执行。
 
-> 📌 **每帧最多只有几毫秒空闲时间**（理想情况 < 50ms），所以你的任务必须能**分片执行**！
+> **每帧最多只有几毫秒空闲时间**（理想情况 < 50ms），所以你的任务必须能**分片执行**！
 
 ---
 
@@ -79,7 +81,7 @@ function performTasks(deadline) {
 requestIdleCallback(performTasks);
 ```
 
-> ✅ 关键：**每次只做一小部分，避免耗尽空闲时间**。
+> 关键：**每次只做一小部分，避免耗尽空闲时间**。
 
 ---
 
@@ -235,4 +237,4 @@ export default Index;
 | **兼容性** | Chrome/Edge 支持，Firefox/Safari 不支持 |
 | **替代方案** | `setTimeout` + 分片，或使用 React 并发特性 |
 
-> ✨ **记住**：`requestIdleCallback` 是“礼貌地请求空闲时间”，不是“保证执行”。设计任务时必须考虑它可能延迟甚至不执行。
+> **记住**：`requestIdleCallback` 是“礼貌地请求空闲时间”，不是“保证执行”。设计任务时必须考虑它可能延迟甚至不执行。

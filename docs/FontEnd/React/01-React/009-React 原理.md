@@ -1,3 +1,5 @@
+# React 原理：Fiber 与并发渲染
+
 ## React 为什么要引入 Fiber 架构？
 
 React 15 及之前的版本使用的是 **栈调和（Stack Reconciler）**，这是一种基于递归的同步更新机制。但随着应用复杂度提升，它暴露出了几个关键问题，最终促使 React 团队在 React 16 中引入了全新的 **Fiber 调和器（Fiber Reconciler）**。

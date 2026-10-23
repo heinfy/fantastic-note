@@ -1,191 +1,74 @@
-在 Vue 3 的 Composition API 中，`watchEffect`、`watch` 及其变体（`watchPostEffect`、`watchSyncEffect`）以及 `onWatcherCleanup` 都是用于**响应式副作用（side effects）管理**的工具函数。它们都基于 Vue 的响应式系统，但**触发时机、依赖追踪方式、使用场景**有显著区别。
-
+---
+sidebar_position: 7
 ---
 
-## 1. `watchEffect(fn)`
+# watch 与副作用清理
 
-- **自动追踪依赖**：运行 `fn` 时访问的所有响应式数据都会被自动收集为依赖
-- **立即执行一次**
-- **异步调度**：在组件更新**之后**（DOM 已更新）执行回调（等同于 `flush: 'post'`）
+`watch` 显式指定侦听源，`watchEffect` 自动收集同步执行期间读取的响应式依赖。二者默认都在所属组件 DOM 更新前调度回调（`flush: 'pre'`）。
 
-语法：
+## watch 与 watchEffect
 
 ```js
-const stop = watchEffect(onCleanup => {
-  // 副作用逻辑
-  const data = someRef.value;
-  fetchData(data);
-
-  // 可选：注册清理函数
-  onCleanup(() => {
-    // 取消请求、清除定时器等
-  });
-});
-```
-
----
-
-## 2. `watch(source, callback, options?)`
-
-- **显式声明依赖源（source）**
-- **不会立即执行**（除非设置 `immediate: true`）
-- 默认**异步调度**（`flush: 'pre'`，在组件更新前执行）
-
-语法：
-
-```js
-// 监听单个 ref
-watch(count, (newVal, oldVal) => { ... });
-
-// 监听多个源
-watch([count, name], ([newCount, newName], [oldCount, oldName]) => { ... });
-
-// 监听 getter
-watch(
-  () => ({ id: userId.value, lang: locale.value }),
-  (newVal, oldVal) => { ... }
-);
-```
-
-- 需要访问**旧值和新值**
-- 需要**精确控制依赖**（避免意外追踪）
-- 需要**延迟首次执行**
-
----
-
-## 3. `watchPostEffect(fn)` —— Vue 3.2+
-
-本质：
-
-```js
-watchEffect(fn, { flush: 'post' });
-```
-
-- 在**DOM 更新后**执行（等同于 `nextTick` 时机）
-- 适合操作 DOM 或依赖最终布局的场景
-
-示例：
-
-```js
-watchPostEffect(() => {
-  // 此时 DOM 已更新
-  console.log(inputEl.value.offsetWidth);
-});
-```
-
----
-
-## 4. `watchSyncEffect(fn)` —— Vue 3.2+
-
-本质：
-
-```js
-watchEffect(fn, { flush: 'sync' });
-```
-
-- **同步执行**：在响应式数据变更后**立即执行**（不等待队列）
-- **慎用！** 可能导致性能问题或无限循环
-
-示例：
-
-```js
-watchSyncEffect(() => {
-  // 立即同步执行
-  syncState.value = source.value;
-});
-```
-
-> 仅在需要严格同步的场景使用（如集成第三方库）
-
----
-
-## 5. `onWatcherCleanup(fn)`
-
-- 在**当前 watcher 停止前**或**下一次 effect 执行前**调用清理函数
-- 是 `watchEffect` 和 `watch` 回调中 `onCleanup` 参数的**独立版本**
-
-使用方式1：在 `watchEffect` / `watch` 回调中使用（推荐）
-
-```js
-watchEffect(onCleanup => {
-  const timer = setTimeout(() => {
-    /* ... */
-  }, 1000);
-
-  onCleanup(() => {
-    clearTimeout(timer); // 清理上一次的副作用
-  });
-});
-```
-
-使用方式2：独立调用（较少用）
-
-```js
-import { onWatcherCleanup } from 'vue';
-
-watchEffect(() => {
-  const timer = setTimeout(() => {
-    /* ... */
-  }, 1000);
-
-  onWatcherCleanup(() => {
-    clearTimeout(timer);
-  });
-});
-```
-
-> 💡 清理函数会在以下时机调用：
->
-> - watcher 停止（组件卸载、手动调用 `stop()`）
-> - 下一次 effect 重新运行前（避免重复副作用）
-
----
-
-## 完整示例对比
-
-```js
-import { ref, watchEffect, watch, watchPostEffect, watchSyncEffect } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 
 const count = ref(0);
 const name = ref('Alice');
 
-// 1. watchEffect：自动追踪 count 和 name
-watchEffect(onCleanup => {
-  console.log('watchEffect:', count.value, name.value);
-  // onCleanup(() => { ... });
-});
+watch(count, (value, oldValue) => {
+  console.log(value, oldValue);
+}); // 默认不会立即执行。
 
-// 2. watch：显式监听，可获取旧值
 watch([count, name], ([newCount, newName], [oldCount, oldName]) => {
-  console.log('watch:', { newCount, oldCount, newName, oldName });
+  console.log(newCount, newName, oldCount, oldName);
 });
 
-// 3. watchPostEffect：DOM 更新后执行
-watchPostEffect(() => {
-  console.log('DOM 已更新');
-});
-
-// 4. watchSyncEffect：同步执行（慎用）
-watchSyncEffect(() => {
-  console.log('同步执行');
-});
-
-// 触发更新
-count.value++; // 所有效果按调度顺序触发
+watchEffect(() => {
+  console.log(count.value, name.value);
+}); // 立即执行一次，自动追踪依赖。
 ```
 
-## 总结
+监听对象属性时使用 getter：`watch(() => state.count, callback)`，不要传入 `state.count` 的当前数字。异步 `watchEffect` 只追踪第一次 `await` 之前读取的依赖。
 
-| 函数               | 依赖追踪 | 首次执行                     | 调度时机                | 获取新/旧值 | 典型用途         |
-| ------------------ | -------- | ---------------------------- | ----------------------- | ----------- | ---------------- |
-| `watchEffect`      | 自动     | ✅ 立即                      | `'post'`（DOM 后）      | ❌          | 通用副作用       |
-| `watch`            | 显式     | ❌（可设 `immediate: true`） | `'pre'`（默认，更新前） | ✅          | 精确控制、需旧值 |
-| `watchPostEffect`  | 自动     | ✅                           | `'post'`                | ❌          | 操作 DOM         |
-| `watchSyncEffect`  | 自动     | ✅                           | `'sync'`（同步）        | ❌          | 严格同步场景     |
-| `onWatcherCleanup` | —        | —                            | —                       | —           | 清理副作用       |
+## 调度与常用选项
 
-> 📌 调度时机说明：
->
-> - `'pre'`：组件更新**前**（可访问旧 DOM）
-> - `'post'`：组件更新**后**（DOM 已更新，等同 `nextTick`）
-> - `'sync'`：**同步立即执行**（不进队列）
+- `flush: 'pre'`（默认）：在父组件更新后、所属组件 DOM 更新前执行，回调会被批量调度。
+- `flush: 'post'`：所属组件 DOM 更新后执行，适合读取 DOM；`watchPostEffect()` 是此配置的 `watchEffect` 别名。
+- `flush: 'sync'`：数据变化时同步执行，不做批处理；`watchSyncEffect()` 是对应别名，避免用于频繁变更的数据。
+- `immediate: true`：创建 `watch` 时立即执行回调。
+- `deep: true`：深度侦听；Vue 3.5+ 可用数字限制遍历深度。直接侦听 `reactive` 对象默认深度侦听，getter 返回对象则默认只关注替换。
+- `once: true`（Vue 3.4+）：源首次变化后停止侦听。
+
+深度修改对象时，若对象引用没有替换，回调中的新旧值可能是同一对象，不是历史快照。
+
+## 清理过期副作用
+
+侦听器重新执行前或停止时，应取消上一次请求、计时器等副作用。
+
+```js
+import { ref, watch } from 'vue';
+
+const userId = ref(1);
+const user = ref(null);
+
+const stop = watch(userId, async (id, oldId, onCleanup) => {
+  const controller = new AbortController();
+  onCleanup(() => controller.abort());
+
+  try {
+    const response = await fetch(`/api/users/${id}`, { signal: controller.signal });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const result = await response.json();
+    if (!controller.signal.aborted) user.value = result;
+  } catch (error) {
+    if (error.name !== 'AbortError') console.error(error);
+  }
+}, { immediate: true });
+
+// 不再需要侦听时调用 stop()。
+```
+
+Vue 3.5+ 也可在回调中使用 `onWatcherCleanup(() => controller.abort())`，必须在同步执行期间注册，不能放在 `await` 之后。参数形式的 `onCleanup` 绑定于当前侦听器，没有这一同步调用限制。
+
+在组件 `setup()` 中同步创建的侦听器通常会随组件卸载自动停止；异步创建或组件外创建的侦听器需自行管理。多个副作用的统一清理见 [effectScope](015-effectScope、getCurrentScope%20和%20onScopeDispose.md)。
+
+参考：[侦听器](https://cn.vuejs.org/guide/essentials/watchers.html)。

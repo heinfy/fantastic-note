@@ -1,4 +1,4 @@
-# MonacoEditor
+# 在 React 中集成 Monaco Editor
 
 ## 安装依赖
 

@@ -1,14 +1,4 @@
----
-id: rc01_004
-title: 004-redux方法
-description: redux
-keywords: [React]
-tags:
-  - React
-hide_title: true
-sidebar_position: 4
-custom_edit_url: null
----
+# Redux 核心方法
 
 ## 核心 api
 

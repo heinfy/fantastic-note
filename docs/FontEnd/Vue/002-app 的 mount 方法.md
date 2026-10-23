@@ -1,109 +1,41 @@
-> `app.mount('#app')` 是 Vue 3 应用启动的**关键一步**，它将之前通过 `createApp()` 创建的**应用实例**挂载到指定的 DOM 元素上，并完成整个应用的初始化和首次渲染。
-
+---
+sidebar_position: 2
 ---
 
-## 一、基本作用
+# app.mount
 
-`createApp(App).mount('#app')`
+`app.mount(container)` 将根组件渲染到指定容器，并返回根组件的公开实例。
 
-- 将根组件 `App` 渲染到 `#app` 这个 DOM 容器中
-- 启动响应式系统、组件树、生命周期等完整 Vue 运行时机制
-- **首次真正操作 DOM**
+## 基本用法
 
-> ⚠️ 注意：`createApp` 只是“准备”，`mount` 才是“启动”。
-
----
-
-## 二、`mount` 方法的完整执行流程
-
-### 1. **解析容器（container）**
-
-- 如果传入的是字符串（如 `'#app'`），会自动调用 `document.querySelector`
-- 也支持直接传入 DOM 元素：`mount(document.getElementById('app'))`
-
----
-
-### 2. **替换容器内容（可选）**
-
-- Vue 会把容器当作“挂载点”，其内部 HTML 会被完全覆盖
-
-> 📌 例如：
-> ```html
-> <div id="app">原有内容</div>
-> ```
-> 挂载后变成：
-> ```html
-> <div id="app">Vue 渲染的内容</div>
-> ```
-
----
-
-### 3. **创建根 VNode（虚拟 DOM 节点）**
 ```js
-const vnode = createVNode(rootComponent, rootProps);
+import { createApp } from 'vue';
+import App from './App.vue';
+
+const app = createApp(App);
+const vm = app.mount('#app');
+// 也可以传入实际的 DOM 元素。
 ```
-- `rootComponent` 是你在 `createApp(App)` 中传入的组件
-- `rootProps` 是可选的第二个参数（很少用）
-- `createVNode` 构建一个描述根组件的虚拟节点对象
 
----
+容器必须存在。同一个应用实例只能挂载一次；需要重新创建应用时，应创建新的 `app`。
 
-### 4. **关联应用上下文**
-- 将当前 `app` 实例的上下文（插件、全局组件、provide 等）绑定到根组件实例
-- 根组件可以通过 `getCurrentInstance().appContext` 访问这些信息
+## 挂载流程
 
----
+1. **解析容器**：字符串通过 `document.querySelector()` 查找，也支持 DOM 元素。
+2. **准备模板**：若根组件没有 `render` 或 `template`，支持运行时编译的构建可使用容器内容作为模板；普通客户端挂载会清空容器原有内容。
+3. **创建根 VNode**：记录根组件、根 props，并关联应用上下文。
+4. **初始化组件**：执行 `setup()`，初始化选项式 API 中的状态与方法。
+5. **首次渲染**：建立渲染副作用，调用渲染函数，收集读取到的响应式依赖，再将 VNode 挂载为真实 DOM。
+6. **完成挂载**：执行挂载生命周期，记录应用的挂载状态，返回组件公开实例。
 
-### 5. **调用底层渲染器（renderer）进行挂载**
-核心代码类似于：
+`ref` / `reactive` 可以在挂载前创建；挂载过程主要建立组件渲染与响应式数据之间的依赖关系。
+
+## 返回值与卸载
+
+`mount()` 返回的公开实例与 `createApp()` 返回的应用对象不同。`<script setup>` 组件的业务属性默认不公开，需通过 `defineExpose()` 显式暴露。
+
 ```js
-renderer.render(vnode, container);
+app.unmount(); // 卸载组件树并运行清理钩子。
 ```
-其中 `renderer` 来自 `@vue/runtime-dom`，它负责：
 
-#### a) **创建根组件实例**
-- 调用 `setup()`（Composition API）
-- 初始化 `data`、`methods`、`computed`、`watch` 等（Options API）
-- 触发 `beforeCreate` → `created`（如果使用 Options API）
-
-#### b) **执行响应式依赖收集**
-- 所有 `ref`、`reactive` 数据被 `Proxy` 包裹，进入响应式系统
-- `computed` 和 `watch` 开始工作
-
-#### c) **首次渲染（patch）**
-- 调用组件的 `render` 函数（或编译 `<template>` 得到的 render 函数）
-- 生成真实 DOM 并插入到 `container` 中
-
-#### d) **触发挂载生命周期**
-- `onBeforeMount` / `beforeMount`
-- `onMounted` / `mounted`
-
-> ✅ 此时用户看到页面内容
-
----
-
-### 6. **缓存根组件实例 & 返回根组件实例的公开代理（proxy）**
-- `mount` 方法**返回根组件实例的 proxy 对象**（用于调试或测试）
-  ```js
-  const vm = app.mount('#app');
-  console.log(vm); // 可访问 data、methods 等（仅开发环境可靠）
-  ```
-- 内部会记录 `_instance`，防止重复挂载
-
----
-
-### 7. **标记已挂载，防止重复调用**
-- 同一个 `app` 实例不能多次 `mount`
-- 第二次调用会警告或报错（避免内存泄漏）
-
----
-
-## 三、总结
-
-`app.mount('#app')` 的核心作用是：
-
-✅ **启动 Vue 应用**  
-✅ **创建根组件实例并激活响应式系统**  
-✅ **渲染虚拟 DOM 到真实 DOM 容器**  
-✅ **触发完整的生命周期钩子**  
-✅ **完成从“配置”到“运行”的转变**
+SSR 已生成的页面需要水合，使用 `createSSRApp()`。生命周期见 [Vue 3 的生命周期](005-Vue%203%20的生命周期.md)。

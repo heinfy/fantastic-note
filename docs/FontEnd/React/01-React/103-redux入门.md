@@ -1,14 +1,4 @@
----
-id: rc01_003
-title: 003-redux基础
-description: redux基础
-keywords: [React]
-tags:
-  - React
-hide_title: true
-sidebar_position: 3
-custom_edit_url: null
----
+# Redux 入门
 
 ![redux 原理图](assets/redux.png)
 

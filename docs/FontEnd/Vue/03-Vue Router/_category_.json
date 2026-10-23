@@ -3,6 +3,6 @@
   "position": 203,
   "link": {
     "type": "generated-index",
-    "description": "Vue Router"
+    "description": "Vue Router 4 导航守卫与组件缓存，兼顾旧版写法说明。"
   }
 }

@@ -1,46 +1,55 @@
-组件内守卫：
+---
+sidebar_position: 1
+---
 
-- `beforeRouteEnter(to, from, next) {}`
-- `beforeRouteUpdate(to, from, next) {}`
-- `beforeRouteLeave(to, from, next) {}`
+# 导航守卫
 
-全局守卫
+导航守卫用于检查权限、取消或重定向导航。以下以 Vue 3 + Vue Router 4 为主。
 
-- `router.beforeEach((to, from, next) => {}`
-- `router.beforeResolve((to, from, next) => {}`
-- `router.afterEach((to, from) => {}`
+## 守卫类型
 
-路由独享守卫
+- 全局前置：`router.beforeEach()`。
+- 全局解析：`router.beforeResolve()`，在组件内守卫和异步路由组件解析之后运行。
+- 全局后置：`router.afterEach()`，用于统计等逻辑，不能阻止导航。
+- 路由独享：路由配置中的 `beforeEnter`；同一路由的 params、query 或 hash 改变不会再次触发它。
+- 组件内：`beforeRouteEnter`、`beforeRouteUpdate`、`beforeRouteLeave`。
+- 组合式 API：`onBeforeRouteUpdate()`、`onBeforeRouteLeave()`；没有 `onBeforeRouteEnter()`，首次进入逻辑可写在 setup 中。
 
-- `beforeEnter((to, from, next) => {}`
+## 权限检查示例
 
 ```js
-const router = new VueRouter({
+import { createRouter, createWebHistory } from 'vue-router';
+import Login from './Login.vue';
+import Profile from './Profile.vue';
+import { isAuthenticated } from './auth';
+
+const router = createRouter({
+  history: createWebHistory(),
   routes: [
-    {
-      path: '/foo',
-      component: Foo,
-      beforeEnter: (to, from, next) => {
-        // 在进入路由前进行一些逻辑处理
-        // 比如验证用户权限
-        if (userAuthenticated()) {
-          next(); // 继续路由导航
-        } else {
-          next('/login'); // 重定向到登录页面
-        }
-      }
-    }
-    // 其他路由配置项...
+    { path: '/login', component: Login },
+    { path: '/profile', component: Profile, meta: { requiresAuth: true } }
   ]
+});
+
+router.beforeEach(to => {
+  if (to.meta.requiresAuth && !isAuthenticated()) {
+    return { path: '/login', query: { redirect: to.fullPath } };
+  }
 });
 ```
 
-进入一个页面触发的函数：
+返回 `false` 取消导航，返回路由位置重定向，不返回值或返回 `true` 则继续。守卫可返回 Promise；Vue Router 3 常见的 `next()` 风格在 Router 4 仍支持，但每条分支必须准确调用一次。
 
-`beforeEach => beforeRouteEnter => beforeResolve => afterEach => created => mounted => beforeRouteLeave`
+## 导航执行顺序
 
-## 链接
+1. 触发导航，调用将离开组件的 `beforeRouteLeave`。
+2. 调用全局 `beforeEach`。
+3. 调用复用组件的 `beforeRouteUpdate`。
+4. 调用路由 `beforeEnter`，解析异步路由组件。
+5. 调用将进入组件的 `beforeRouteEnter`。
+6. 调用全局 `beforeResolve`，确认导航。
+7. 调用 `afterEach`，触发 DOM 更新，再调用 `beforeRouteEnter` 中通过 `next(vm => ...)` 注册的回调。
 
-- [Vue 导航守卫 beforeRouteEnter，beforeRouteUpdate，beforeRouteLeave 详解](https://blog.csdn.net/qq_43196107/article/details/90235110)
-- [vue 组件独享守卫钩子函数参数详解（beforeRouteEnter、beforeRouteUpdate、beforeRouteLeave）](https://www.cnblogs.com/lhl66/p/9195901.html)
-- [路由守卫 beforeEach,beforeResolve,afterEach](https://www.jianshu.com/p/e5e0d5d4e689)
+`beforeRouteEnter` 执行时组件实例尚未创建，不能访问 `this`；更新与离开守卫可访问已有实例。组件的 `created`、`mounted` 属于组件生命周期，不应与路由守卫列为同一组。
+
+参考：[导航守卫](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html)。

@@ -1,107 +1,48 @@
-> **✅ `readonly` 和 `shallowReadonly` 创建的对象本身是响应式的（reactive），但它们是“只读”的——你不能修改它们，但当原始数据变化时，它们会自动更新。**
-
+---
+sidebar_position: 8
 ---
 
-## 一、核心原理：`readonly` 是“只读视图”，不是“静态快照”
+# readonly 与 shallowReadonly
 
-`readonly(obj)` 并**不会复制数据**，而是创建一个 **只读的 Proxy 代理**，它仍然**追踪原始响应式对象的变化**。
+`readonly()` 为数据创建深层只读视图；`shallowReadonly()` 只限制根属性的写入。它们不复制数据，也不等同于冻结快照。
 
-### 🧪 实验验证
+## 只读视图保留源数据的更新
 
 ```js
 import { reactive, readonly, watchEffect } from 'vue';
 
-// 1. 原始响应式对象
-const original = reactive({ count: 0 });
+const source = reactive({ count: 0, user: { name: 'Alice' } });
+const view = readonly(source);
 
-// 2. 创建只读视图
-const readOnlyView = readonly(original);
-
-// 3. 监听只读视图
-watchEffect(() => {
-  console.log('Read-only count:', readOnlyView.count);
-});
-
-// 4. 修改原始对象
-original.count = 1; // ✅ 触发更新！
-// 输出: "Read-only count: 1"
+watchEffect(() => console.log(view.count));
+source.count = 1; // 通过源代理修改，依赖会更新。
+view.count = 2; // 写入被阻止；开发环境会警告。
+view.user.name = 'Bob'; // 深层写入也被阻止。
 ```
 
-> ✅ 结论：**`readonly` 对象是响应式的**，它反映原始数据的变化。
-
----
-
-## 二、`shallowReadonly` 同样是响应式的（但仅限根层）
+`readonly(reactiveObject)` 可通过底层响应式代理追踪更新；`readonly(plainObject)` 不会把通过原始普通对象发生的修改变为可追踪事件。
 
 ```js
-import { reactive, shallowReadonly, watchEffect } from 'vue';
-
-const original = reactive({
-  a: 1,
-  nested: { b: 2 }
-});
-
-const shallowRO = shallowReadonly(original);
-
-watchEffect(() => {
-  console.log('a:', shallowRO.a);
-  console.log('b:', shallowRO.nested.b);
-});
-
-// ✅ 触发更新：根属性变更
-original.a = 10; // → 打印新值
-
-// ✅ 也触发更新！因为 nested 对象本身是 reactive 的
-original.nested.b = 20; // → 打印新值（因为 original.nested 是 reactive）
-
-// ❌ 但如果 nested 不是 reactive，则不响应
-const plainObj = { a: 1, nested: { b: 2 } };
-const shallowRO2 = shallowReadonly(plainObj);
-// 修改 plainObj.nested.b 不会触发更新（因为 plainObj 本身非响应式）
+const raw = { count: 0 };
+const view = readonly(raw);
+watchEffect(() => console.log(view.count));
+raw.count = 1; // 数据已改变，但该直接写入不会通知副作用。
 ```
 
-> ✅ 关键点：  
-> - `shallowReadonly` 的响应性**取决于原始对象是否响应式**
-> - 如果原始对象是 `reactive`，那么：
->   - 根属性变化 → 响应式更新
->   - 嵌套属性变化 → **如果嵌套对象也是 reactive，则仍会更新**（因为原始数据变了）
+## shallowReadonly 的边界
 
----
+```js
+import { shallowReadonly } from 'vue';
 
-## 三、重要澄清：什么是“响应式”？
+const config = shallowReadonly({ theme: 'dark', options: { debug: true } });
+config.theme = 'light'; // 被阻止。
+config.options.debug = false; // 允许，嵌套普通对象保持原样。
+```
 
-在 Vue 中，“响应式”指：
-> **当数据源变化时，依赖该数据的副作用（如模板、watchEffect）会自动重新执行。**
+浅层只读不主动转换嵌套对象。若嵌套值本来是响应式或只读代理，其原有行为仍然保留。
 
-`readonly` / `shallowReadonly` **完全满足这个定义**，所以它们是响应式的。
+## 用途与判断
 
-它们和 `reactive` 的唯一区别是：
-- **`reactive`：可读 + 可写**
-- **`readonly`：可读 + 不可写（写会警告）**
+适合对外提供状态读取接口，并由拥有者提供修改方法，例如 `provide('count', readonly(count))`。
 
----
-
-## 四、常见误区
-
-### ❌ 误区1：“readonly 是静态的，不会更新”
-> 错！它是**动态只读视图**，始终与原始数据同步。
-
-### ❌ 误区2：“shallowReadonly 的嵌套属性一定不响应”
-> 不一定！如果原始嵌套对象是 `reactive`，它仍然会响应。  
-> `shallowReadonly` 只表示**它自己不会把嵌套对象转为 readonly**，但不阻止原始数据的响应性。
-
----
-
-## 五、总结
-
-| 问题 | 答案 |
-|------|------|
-| `readonly` 是响应式的吗？ | ✅ 是！它反映原始响应式数据的变化 |
-| `shallowReadonly` 是响应式的吗？ | ✅ 是！只要原始对象是响应式的 |
-| 它们能被修改吗？ | ❌ 不能（修改会警告，且无效） |
-| 它们和 `reactive` 的区别？ | **只读 vs 可写**，响应性机制相同 |
-
-> **`readonly` = “只读的窗口”，不是“照片”**  
-> 它背后的数据流依然活跃，只是你不能从这个窗口往里写。
-
-这种设计使得 `readonly` 成为**安全暴露内部状态**的理想工具（如 Vuex/Pinia 的 store state）。
+`isReadonly()` 判断只读性，`isReactive()` 判断响应式代理来源，两者并不互斥；`readonly(reactive({}))` 的两项判断都为 `true`。详见 [响应式类型判断](010-isProxy、isReactive%20和%20isReadonly.md)。浅层状态管理见 [shallowReactive](013-shallowReactive%20和%20shallowReadonly.md)。

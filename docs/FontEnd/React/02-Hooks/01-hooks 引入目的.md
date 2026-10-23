@@ -1,3 +1,5 @@
+# React Hooks 引入目的
+
 React 引入 Hooks 的核心目的，是为了解决**类组件**（Class Component）在开发实践中暴露出的三大核心痛点，从而让状态逻辑的复用更简单、让代码逻辑更清晰、并降低学习门槛。
 
 React Hooks 于 2019 年在 React 16.8 版本中正式引入，它允许你在不编写类组件的情况下，使用状态（state）和其他 React 特性。

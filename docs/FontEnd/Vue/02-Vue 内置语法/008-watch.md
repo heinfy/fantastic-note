@@ -1,6 +1,6 @@
 ---
 id: watch
-title: watch
+title: 选项式 API：watch
 keywords: [Vue]
 tags:
   - Vue
@@ -10,68 +10,50 @@ description: watch
 custom_edit_url: null
 ---
 
-```html
-<template>
-  <div>{{ testWatch }}</div>
-</template>
+# 选项式 API：watch
 
-<script>
-  export default {
-    data() {
-      return {
-        testWatch: 'old string',
-        testWatch1: {
-          a: 'old string'
-        }
-      };
+`watch` 选项适用于 Vue 2 与 Vue 3 的选项式 API。组合式 API 的用法见 [watch](../007-watch.md)。
+
+## 回调、方法名与配置对象
+
+```js
+export default {
+  data() {
+    return { count: 0, title: '', query: '', user: { name: 'Alice' } };
+  },
+  watch: {
+    count(value, oldValue) {
+      console.log(value, oldValue);
     },
-    watch: {
-      // 第一种
-      testWatch: function (val, oldVal) {
-        console.log('testWatch: %s, old: %s', val, oldVal)
-      },
-      // 第二种，指向 methods 的方法
-      testWatch: 'someMethod'
-      // 第三种，在 data 中初次赋值也可以监听到
-      testWatch:  {
-        handler: function (val, oldVal) {
-          console.log('testWatch: %s, old: %s', val, oldVal)
-        },
-        // 或 handler: 'someMethod',
-        immediate: true // 初次赋值监听
-      },
-      // 第四种，深度监听，监听对象的某个属性
-      'testWatch1.a': {
-        handler: function (val, oldVal) {
-          console.log('testWatch.a: %s, old: %s', val, oldVal)
-        },
-        deep: true
-      },
-      // 第五种，传入回调数组，它们会被逐一调用
-      testWatch: [
-        'someMethod',
-        function handle2(val, oldVal) {
-          /* ... */
-        },
-        {
-          handler: function handle3(val, oldVal) {
-            /* ... */
-          }
-          /* ... */
-        }
-      ]
+    title: 'onTitleChange',
+    query: {
+      immediate: true,
+      handler(value) { console.log('查询：', value); }
     },
-    mounted() {
-      setInterval(() => {
-        this.testWatch = 'new string';
-        this.testWatch1.a = 'new string----';
-      }, 4000);
-    },
-    methods: {
-      someMethod(n, o) {
-        console.log('someMethod', n, o);
-      }
+    'user.name'(value) {
+      console.log('姓名：', value);
     }
-  };
-</script>
+  },
+  methods: {
+    onTitleChange(value) { console.log('标题：', value); }
+  }
+};
 ```
+
+侦听嵌套路径可使用字符串 key；侦听整个对象内部的变化可配置 `deep: true`。`immediate` 在建立侦听器时执行一次，不表示监听 data 的每次初始化赋值。
+
+## 同一属性的多个回调
+
+同一 key 不要重复声明；需要多个处理函数时传入数组。
+
+```js
+watch: {
+  count: [
+    'onCountChange',
+    function logCount(value) { console.log(value); },
+    { handler: 'initializeCount', immediate: true }
+  ]
+}
+```
+
+上面是组件 watch 选项的片段，字符串形式需对应组件 methods。动态创建的侦听器可用 `const stop = this.$watch('count', callback)`，不再需要时调用 `stop()`。
