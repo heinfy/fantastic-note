@@ -121,12 +121,6 @@ const config: Config = {
         {
           type: 'docSidebar',
           position: 'left',
-          sidebarId: 'tsSidebar',
-          label: 'TypeScript',
-        },
-        {
-          type: 'docSidebar',
-          position: 'left',
           sidebarId: 'electronSidebar',
           label: 'Electron',
         },
@@ -134,7 +128,13 @@ const config: Config = {
           type: 'docSidebar',
           position: 'left',
           sidebarId: 'vscodePluginSidebar',
-          label: 'VSCode Plugin',
+          label: 'VSCode 插件',
+        },
+        {
+          type: 'docSidebar',
+          position: 'left',
+          sidebarId: 'pySidebar',
+          label: 'Python',
         },
         {
           type: 'dropdown',
@@ -158,8 +158,8 @@ const config: Config = {
             },
             {
               type: 'docSidebar',
-              sidebarId: 'pySidebar',
-              label: 'Python',
+              sidebarId: 'tsSidebar',
+              label: 'TypeScript',
             },
             {
               type: 'docSidebar',
