@@ -62,6 +62,9 @@ ALGOLIA_API_KEY=xxx \
 ALGOLIA_INDEX_NAME=xxx \
 npm run build
 ```
+## 简历样式来源
+
+简历页面 `/resume` 的样式基于 [Start Bootstrap Resume](https://github.com/StartBootstrap/startbootstrap-resume) 模板，并在此基础上适配 Docusaurus 和 React，保留侧栏导航与响应式布局。
 
 ## 相关链接
 
