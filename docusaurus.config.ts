@@ -173,7 +173,7 @@ const config: Config = {
             },
           ],
         },
-        // { to: '/blog', label: '博客', position: 'left' },
+        // { to: '/blog', label: '博客', position: 'right' },
         {
           href: 'https://github.com/heinfy/fantastic-note',
           label: 'GitHub',
@@ -190,7 +190,11 @@ const config: Config = {
         },
         {
           label: '我的简历',
-          href: 'https://resume.heinfy.top/',
+          to: '/resume',
+        },
+        {
+          label: '色彩游乐场',
+          to: '/playground/colors',
         },
         {
           label: 'GitHub',

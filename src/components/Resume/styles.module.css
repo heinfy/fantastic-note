@@ -1,0 +1,218 @@
+/* Layout adapted from Start Bootstrap Resume. See static/resume/LICENSE.txt. */
+.page {
+  --resume-accent: #bd5d38;
+  --resume-heading: #343a40;
+  --resume-text: #6c757d;
+  --resume-nav-height: 3.5rem;
+  min-height: 100vh;
+  padding-top: var(--resume-nav-height);
+  color: var(--resume-text);
+  background: #fff;
+  font-family: var(--ifm-font-family-base);
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.page *, .page *::before, .page *::after { box-sizing: border-box; }
+
+.page h1, .page h2, .page h3, .subheading, .detail, .welcome {
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.page h1, .page h2, .page h3 {
+  color: var(--resume-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  scroll-margin-top: var(--resume-nav-height);
+}
+
+.page h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.5rem, calc(1.725rem + 5.7vw), 6rem);
+  line-height: 1;
+}
+
+.page h2 {
+  margin: 0 0 3rem;
+  font-size: clamp(2rem, calc(1.475rem + 2.7vw), 3.5rem);
+}
+
+.page h3 {
+  margin: 0;
+  font-size: clamp(1.5rem, calc(1.325rem + 0.9vw), 2rem);
+}
+
+.page p { margin: 0 0 1rem; }
+.page a { color: var(--resume-accent); text-decoration: underline; }
+.page a:hover { color: #974a2d; }
+.page a:focus-visible, .menuToggle:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.page hr { margin: 1rem 0; border: 0; border-top: 1px solid var(--resume-text); opacity: 0.25; }
+.accent { color: var(--resume-accent); }
+.subheading, .detail { font-size: 1.5rem; }
+.subheading { margin-bottom: 1rem; }
+
+.skipLink {
+  position: fixed;
+  left: 1rem;
+  top: 0.5rem;
+  z-index: 1100;
+  transform: translateY(-200%);
+  padding: 0.5rem 1rem;
+  background: #fff;
+}
+.skipLink:focus { transform: translateY(0); }
+
+.sidebar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background: var(--resume-accent);
+  color: #fff;
+}
+
+.page .brand {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  padding-block: 0.3125rem;
+}
+.portrait { display: none; }
+.menuToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 0.375rem;
+  background: transparent;
+  color: rgb(255 255 255 / 70%);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.menuToggle svg { width: 1.5rem; height: 1.5rem; }
+.navigation { display: none; flex-basis: 100%; }
+.navigationOpen { display: block; }
+.navigationList { list-style: none; padding: 0; margin: 0; }
+.navigationList li { margin: 0; }
+.page .navLink {
+  display: block;
+  padding: 0.5rem 0;
+  color: rgb(255 255 255 / 60%);
+  text-decoration: none;
+  font-weight: 800;
+  letter-spacing: 0.05rem;
+}
+.page .navLink:hover, .page .activeLink { color: #fff; }
+.page .backLink {
+  display: inline-block;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: rgb(255 255 255 / 75%);
+  font-size: 0.875rem;
+  text-underline-offset: 0.2em;
+}
+.page .backLink:hover { color: #fff; }
+
+.content { width: 100%; }
+.section {
+  display: flex;
+  align-items: center;
+  max-width: 75rem;
+  padding: 5rem 1rem;
+  scroll-margin-top: var(--resume-nav-height);
+}
+.section + .section { border-top: 1px solid #e0e0e0; }
+.sectionContent { width: 100%; min-width: 0; }
+.detailRow { display: flex; flex-direction: column; }
+.detail { flex: 1 1 auto; min-width: 0; margin-bottom: 1rem; }
+.detail a, .detail span { text-transform: none; }
+.socialLinks { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 0; padding-top: 1rem; }
+.socialLink { display: flex; align-items: center; }
+.socialLink .subheading { margin: 0; }
+.page .socialIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-right: 1.5rem;
+  border-radius: 50%;
+  background: #495057;
+  color: #fff;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+.page .socialIcon:hover { background: var(--resume-accent); color: #fff; }
+.socialIcon svg { width: 1.5rem; height: 1.5rem; }
+.page .welcome { padding-top: 3rem; color: var(--resume-accent); font-size: 1.5rem; }
+
+.iconList { list-style: none; margin: 0 0 0 2.5rem; padding: 0; }
+.iconList li { position: relative; margin-bottom: 0.25rem; }
+.iconList svg { position: absolute; left: -2rem; top: 0.25rem; width: 1.25rem; height: 1rem; }
+.assessment svg { color: #ffc107; }
+.entry { display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 3rem; gap: 0.5rem; }
+.entryContent { flex: 1; min-width: 0; }
+.period { flex-shrink: 0; color: var(--resume-accent); }
+.projectDescription { margin-bottom: 0.5rem; }
+.workLabel { margin-bottom: 0.25rem; }
+.projectParagraphs { padding-inline: 1rem; }
+.page .projectParagraphs p { margin-bottom: 0.25rem; }
+.entry:has(.projectParagraphs) .subheading { margin-bottom: 0.5rem; text-transform: none; }
+
+@media (min-width: 768px) {
+  .section { min-height: 100vh; }
+  .detailRow { flex-direction: row; }
+  .entry { flex-direction: row; gap: 1rem; }
+}
+
+@media (min-width: 992px) {
+  .page { padding-top: 0; padding-left: 17rem; }
+  .sidebar {
+    inset: 0 auto 0 0;
+    width: 17rem;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 0;
+    text-align: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+  .page .brand { margin: auto auto 0; padding: 0.5rem; }
+  .portrait {
+    display: block;
+    width: 10rem;
+    height: 10rem;
+    margin-bottom: 0.5rem;
+    border: 0.5rem solid rgb(255 255 255 / 20%);
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .mobileName, .menuToggle { display: none; }
+  .navigation { display: block; flex-basis: auto; width: 100%; margin-bottom: auto; }
+  .page .navLink { padding: 0.5rem 1rem; }
+  .section { padding: 5rem 3rem; scroll-margin-top: 0; }
+}
+
+@media print {
+  .page { padding: 0; color: #343a40; }
+  .sidebar, .skipLink { display: none; }
+  .section { min-height: auto; max-width: none; padding: 1.5rem 0; }
+  .page h1 { font-size: 2.5rem; }
+  .page h2 { margin-bottom: 1rem; font-size: 2rem; }
+  .page h3 { font-size: 1.5rem; }
+  .entry { display: block; margin-bottom: 1.5rem; break-inside: avoid; }
+  .socialLinks { display: none; }
+}
